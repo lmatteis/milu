@@ -36,17 +36,18 @@ if(!request.getRequestURI().equals("/add.jsp")) {\
 	<div id="header"> \
 		<ul> \
 			<li>';
-if(this.user) {
-    this.out += '<a href="/users/'+this.user+'">'+this.user+'</a>\
+var u;
+if(u = _request.getAttribute("user")) {
+    this.out += '<a href="/users/'+u.getKey().getId()+'">'+u.getProperty("name")+'</a>\
                 <span class="light">&bull;</span> \
 <a href="/add" id="newest_torrents">Inserisci Ricetta</a> \
                 <span class="light">&bull;</span> \
- <a href="/logout?returnurl=<%=reqUri%>">Logout</a> \
+ <a href="/logout?returnurl='+_request.getRequestURI()+'">Logout</a> \
 ';
 } else {
     this.out +='<a href="/register?returnurl='+_request.getRequestURI()+'">Registrati</a> \
                 <span class="light">&bull;</span> \
- <a href="/login?returnurl=<%=reqUri%>">Login</a> \
+ <a href="/login?returnurl='+_request.getRequestURI()+'">Login</a> \
 ';
 }
             this.out +='</li>			\

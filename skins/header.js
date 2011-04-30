@@ -44,7 +44,7 @@ if(this.user) {
  <a href="/logout?returnurl=<%=reqUri%>">Logout</a> \
 ';
 } else {
-    this.out +='<a href="/register?returnurl=<%=reqUri%>">Registrati</a> \
+    this.out +='<a href="/register?returnurl='+_request.getRequestURI()+'">Registrati</a> \
                 <span class="light">&bull;</span> \
  <a href="/login?returnurl=<%=reqUri%>">Login</a> \
 ';

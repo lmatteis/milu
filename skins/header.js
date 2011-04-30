@@ -1,4 +1,4 @@
-this.out += '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
+this.out = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> \
  \
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> \
@@ -7,7 +7,7 @@ this.out += '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 \
 <title>Milu</title> \
  \
-<link href=\'http://fonts.googleapis.com/css?family=Cabin:regular,bold\' rel="stylesheet" type="text/css"> \
+<!-- just so dev is faster<link href=\'http://fonts.googleapis.com/css?family=Cabin:regular,bold\' rel="stylesheet" type="text/css">--> \
 <link type="text/css" rel="stylesheet" href="/stylesheets/reset.css" /> \
 <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" /> \
  \
@@ -35,26 +35,21 @@ if(!request.getRequestURI().equals("/add.jsp")) {\
 	<div id="header-wrapper">	\
 	<div id="header"> \
 		<ul> \
-			<li>\
-            <!--\
-<%\
-MyUser myUser = (MyUser)request.getAttribute("myUser");\
-String reqUri = (String)request.getAttribute("javax.servlet.forward.request_uri");\
-if(myUser != null) {\
-%>\
-                <a href="/users/<%=myUser.getKey().getId()%>"><%=myUser.getName()%></a>\
+			<li>';
+if(this.user) {
+    this.out += '<a href="/users/'+this.user.id+'">'+this.user.name+'</a>\
                 <span class="light">&bull;</span> \
 <a href="/add" id="newest_torrents">Inserisci Ricetta</a> \
                 <span class="light">&bull;</span> \
  <a href="/logout?returnurl=<%=reqUri%>">Logout</a> \
-<% } else { %>\
- <a href="/register?returnurl=<%=reqUri%>">Registrati</a> \
+';
+} else {
+    this.out +='<a href="/register?returnurl=<%=reqUri%>">Registrati</a> \
                 <span class="light">&bull;</span> \
  <a href="/login?returnurl=<%=reqUri%>">Login</a> \
-\
-<% } %>\
--->\
-            </li>			\
+';
+}
+            this.out +='</li>			\
 		</ul> \
 		<a href="/" id="logo"><h1>Milù</h1></a> \
 		<h2 class="cabin">Ricette di tutte le persone su questo mondo</h2> \

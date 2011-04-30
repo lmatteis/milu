@@ -37,7 +37,7 @@ if(!request.getRequestURI().equals("/add.jsp")) {\
 		<ul> \
 			<li>';
 if(this.user) {
-    this.out += '<a href="/users/'+this.user.id+'">'+this.user.name+'</a>\
+    this.out += '<a href="/users/'+this.user+'">'+this.user+'</a>\
                 <span class="light">&bull;</span> \
 <a href="/add" id="newest_torrents">Inserisci Ricetta</a> \
                 <span class="light">&bull;</span> \

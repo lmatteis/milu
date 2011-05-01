@@ -2,6 +2,8 @@ require("apejs.js");
 require("googlestore.js");
 
 require("./usermodel.js")
+require("./fileupload.js");
+require("./imageresizer.js");
 
 // this happens before the handler
 apejs.before = function(request, response) {
@@ -152,8 +154,6 @@ apejs.urls = {
             }
         },
         post: function(request, response) {
-            require("./fileupload.js");
-            require("./imageresizer.js");
             var user = request.getAttribute("user");
             if(!user) {
                 response.getWriter().println("Devi fare il login per accedere a questa pagina");
@@ -221,5 +221,71 @@ apejs.urls = {
 
             response.getOutputStream().write(imageBytes);
         }
+    },
+    "/add": {
+        get: function(request, response) {
+            if(!request.getAttribute("user")) { // not logged-in
+                response.sendRedirect("/");
+                return;
+            }
+
+            var error = "";
+            var o = {error: error};
+            require("./skins/add-edit.js", o);
+            response.getWriter().println(o.out);
+        },
+        post: function(request, response) {
+            if(!request.getAttribute("user")) { // not logged-in
+                response.sendRedirect("/");
+                return;
+            }
+
+            var recipe = {
+                title: true,
+                content: true,
+                ingredients: true,
+                tags: true
+            };
+
+            var data = fileupload.getData(request);
+
+            // loop through the form fields and get values
+            for(var i=0; i<data.length; i++)
+                if(recipe[data[i].fieldName]) {
+                    if(data[i].fieldName == "content" || data[i].fieldName == "ingredients")
+                        data[i].fieldValue = new Text(data[i].fieldValue);
+                    if(data[i].fieldName == "tags")
+                        data[i].fieldValue = data[i].fieldValue.trim().split(" ");
+
+                    recipe[data[i].fieldName] = data[i].fieldValue;
+                }
+
+            // save recipe
+            var entity = googlestore.entity("recipe", recipe);
+            var recipeKey = googlestore.put(entity);
+
+            var error = "";
+            var o = {error: error};
+            require("./skins/add-edit.js", o);
+            response.getWriter().println(o.out);
+        }
+    },
+    "/edit-recipe/([a-zA-Z0-9_]+)" : {
+        get: function(request, response, matches) {
+            if(!request.getAttribute("user")) { // not logged-in
+                response.sendRedirect("/");
+                return;
+            }
+            var recipeId = matches[1];
+
+            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+                recipe = googlestore.get(recipeKey);
+
+            var error = "";
+            var o = {error: error, recipeId:matches[1], recipe: recipe};
+            require("./skins/add-edit.js", o);
+            response.getWriter().println(o.out);
+        }
+
     }
 };

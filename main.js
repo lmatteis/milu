@@ -41,7 +41,7 @@ apejs.urls = {
         },
         post: function(request, response) {
             var user = {
-                date: new java.util.Date(),
+                created: new java.util.Date(),
                 name: request.getParameter("name"),
                 email: request.getParameter("email"),
                 password: request.getParameter("password")
@@ -120,6 +120,24 @@ apejs.urls = {
             session.invalidate(); 
             response.sendRedirect(returnUrl);
         }
+    },
+    "/users/([a-zA-Z0-9_]+)" : {
+        get: function(request, response, matches) {
+            var userId = matches[1],
+                // create key from the user id
+                userKey = googlestore.createKey("user", parseInt(userId)),
+                thisUser = googlestore.get(userKey),
+                // get this users recipes
+                recipes = []; // <- FIXME - implement
+
+            var o = { 
+                thisUser: thisUser,
+                recipes: recipes
+            };
+            require("./skins/user-page.js", o);
+            response.getWriter().println(o.out);
+        }
     }
+
 
 };

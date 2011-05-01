@@ -1,4 +1,3 @@
-importPackage(java.security);
 importPackage(java.lang);
 
 var usermodel = {
@@ -27,7 +26,7 @@ var usermodel = {
             }
             return buf.toString();
         }
-        var md = MessageDigest.getInstance("SHA-1");
+        var md = java.security.MessageDigest.getInstance("SHA-1");
         md.update(text.getBytes("iso-8859-1"), 0, text.length());
         var sha1hash = md.digest();
         return bytesToHex(sha1hash);

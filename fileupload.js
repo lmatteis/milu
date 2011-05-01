@@ -20,11 +20,7 @@ var fileupload = {
                         // added the "" at the end to convert it to JS string
                         fieldValue: new java.lang.String(IOUtils.toByteArray(stream), "utf-8")
                     });
-					// LOG.info("Got a form field: " +fieldName+" with value: "+fieldValue);
-					//if(fieldName.equals("name")) name = fieldValue;
 				} else {
-					//LOG.info("Got an uploaded file: " +item.getFieldName() +", name = "+item.getName());
-					// assign values of image
                     data.push({
                         file: true,
                         fieldName: item.getName(),

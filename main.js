@@ -153,48 +153,73 @@ apejs.urls = {
         },
         post: function(request, response) {
             require("./fileupload.js");
+            require("./imageresizer.js");
             var user = request.getAttribute("user");
             if(!user) {
                 response.getWriter().println("Devi fare il login per accedere a questa pagina");
                 return;
             }
 
+            var error = "";
+
             // get the multipart form data from the request
             var data = fileupload.getData(request);
 
             // TODO - resize image
 
-
-            var imageKey = false;
-            // upload the files first so we get imageKey
-            for(var i=0; i<data.length; i++) {
-                if(data[i].file && data[i].fieldName != "") { // it's a file (image)
-                    // add this image in the entity 'image'
-                    var image = googlestore.entity("image", {
-                        name: data[i].fieldName,
-                        image: data[i].fieldValue // this is the actual blob
-                    });
-                    // insert it
-                    imageKey = googlestore.put(image);
+            try {
+                var imageKey = false;
+                // upload the files first so we get imageKey
+                for(var i=0; i<data.length; i++) {
+                    if(data[i].file && data[i].fieldName != "") { // it's a file (image)
+                        var resized = imageresizer.resize(data[i].fieldValue, 128, 128);
+                        // add this image in the entity 'image'
+                        var image = googlestore.entity("image", {
+                            name: data[i].fieldName,
+                            image: resized // this is the actual blob
+                        });
+                        // insert it
+                        imageKey = googlestore.put(image);
+                        break; // we're only expecting 1 image
+                    }
                 }
+
+                // no iterate over it again but only for form fields
+                for(i=0; i<data.length; i++) {
+                    if(!data[i].file && data[i].fieldName == "name") {
+                        user.setProperty("name", data[i].fieldValue);
+                        if(imageKey)
+                            user.setProperty("imageKey", imageKey);
+                    }
+                }
+
+                googlestore.put(user);
+            } catch(e) {
+                error = "L'immagine e' troppo grande. Prova a ridimensionarla";
             }
 
-            // no iterate over it again but only for form fields
-            for(i=0; i<data.length; i++) {
-                if(!data[i].file && data[i].fieldName == "name") {
-                    user.setProperty("name", data[i].fieldValue);
-                    if(imageKey)
-                        user.setProperty("imageKey", imageKey);
-                }
-            }
+            if(error != "") {
+                var o = {error: error};
+                require("./skins/edit-user.js", o);
+                response.getWriter().println(o.out);
+            } else 
+                response.sendRedirect("/edit");
+        }
+    },
+    "/serve/([a-zA-Z0-9_]+).png" : {
+        get: function(request, response, matches) {
+            response.setHeader("Cache-Control", "max-age=315360000");
+            response.setContentType("image/png");
 
-            googlestore.put(user);
+            var imageId = matches[1],
+                // create key from the user id
+                imageKey = googlestore.createKey("image", parseInt(imageId)),
+                image = googlestore.get(imageKey);
 
-            response.getWriter().println("edited");
+            var imageBlob = image.getProperty("image"),
+                imageBytes = imageBlob.getBytes();
 
-
+            response.getOutputStream().write(imageBytes);
         }
     }
-
-
 };

@@ -4,8 +4,8 @@ this.out += '\
             <tbody><tr>\
                 <!--cell-->\
                 <td style="vertical-align: top; width: 170px; text-align: center;">';
-if(this.thisUser.avatarKey) {
-    this.out += '<img src="/serve/'+this.thisUser.avatarKey.getId()+'.png" />';
+if(this.thisUser.getProperty("imageKey")) {
+    this.out += '<img src="/serve/'+this.thisUser.getProperty("imageKey").getId()+'.png" />';
 } else {
     this.out += '<img src="/images/default-avatar.png" />';
 }

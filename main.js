@@ -373,5 +373,57 @@ apejs.urls = {
             response.getWriter().println(o.out);
         }
 
+    },
+    "/recipes/([a-zA-Z0-9_]+)" : {
+        get: function(request, response, matches) {
+            var recipeId = matches[1],
+                recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+                recipe = googlestore.get(recipeKey);
+
+            var tags = recipe.getProperty("tags").toArray();
+            var recipeAuthor = googlestore.get(recipe.getProperty("userKey"));
+
+            // get comments for this recipe
+            var q = googlestore.query("comment");
+            q.addFilter("recipeKey", "=", recipe.getKey());
+            var comments = q.fetch(50); // FIXME limiting comments to 50
+
+            var o = {
+                recipe: recipe, 
+                tags: tags,
+                recipeAuthor: recipeAuthor,
+                comments: comments
+            };
+            require("./skins/recipe-page.js", o);
+            response.getWriter().println(o.out);
+        }
+    },
+    "/add-comment" : {
+        post: function(request, response) {
+            var user = request.getAttribute("user");
+            if(!user) {
+                response.sendRedirect("/"); 
+                return;
+            }
+            var recipeKeyString = request.getParameter("recipeKeyString"),
+                comment = request.getParameter("comment");
+
+            if(comment == "" || recipeKeyString == "") {
+                response.sendRedirect("/"); 
+                return;
+            }
+
+            var recipeKey = KeyFactory.stringToKey(recipeKeyString);
+
+            var comment = googlestore.entity("comment", {
+                recipeKey: recipeKey,
+                userKey: user.getKey(),
+                created: new java.util.Date(),
+                comment: new Text(comment)
+            });
+
+            googlestore.put(comment);
+            response.sendRedirect("/recipes/"+recipeKey.getId()+"#comments");
+        }
     }
 };

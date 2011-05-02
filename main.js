@@ -27,11 +27,15 @@ apejs.before = function(request, response) {
 apejs.urls = {
     "/": {
         get: function(request, response) {
+            // get all recipes
+            var q = googlestore.query("recipe");
+            var recipes = q.fetch(10);
+
             // pass all this data to the skin
             var o = { 
+                recipes: recipes
             };
             require("./skins/index.js", o);
-
             response.getWriter().println(o.out);
         }
     },
@@ -165,26 +169,36 @@ apejs.urls = {
             // get the multipart form data from the request
             var data = fileupload.getData(request);
 
-            // TODO - resize image
-
             try {
                 var imageKey = false;
-                // upload the files first so we get imageKey
+                // upload the image first so we get imageKey
                 for(var i=0; i<data.length; i++) {
-                    if(data[i].file && data[i].fieldName != "") { // it's a file (image)
-                        var resized = imageresizer.resize(data[i].fieldValue, 128, 128);
-                        // add this image in the entity 'image'
-                        var image = googlestore.entity("image", {
-                            name: data[i].fieldName,
-                            image: resized // this is the actual blob
-                        });
-                        // insert it
+                    if(data[i].file && data[i].fieldName != "") { 
+                        var resized = imageresizer.resize(data[i].fieldValue, 128, 128),
+                            o = {
+                                name: data[i].fieldName,
+                                image: resized // this is the actual blob
+                            };
+
+                        var image = null;
+                        if(user.getProperty("imageKey")) { 
+                            try {
+                                image = googlestore.get(user.getProperty("imageKey"));
+                                googlestore.set(image, o); // edit it
+                            } catch(e) {
+                                image = googlestore.entity("image", o);
+                            }
+                        } else
+                            // if we don't provide an existing keyName, the image will be added
+                            image = googlestore.entity("image", o);
+                            
+
                         imageKey = googlestore.put(image);
                         break; // we're only expecting 1 image
                     }
                 }
 
-                // no iterate over it again but only for form fields
+                // now iterate over it again but only for form fields
                 for(i=0; i<data.length; i++) {
                     if(!data[i].file && data[i].fieldName == "name") {
                         user.setProperty("name", data[i].fieldValue);
@@ -235,44 +249,112 @@ apejs.urls = {
             response.getWriter().println(o.out);
         },
         post: function(request, response) {
-            if(!request.getAttribute("user")) { // not logged-in
+            var user = request.getAttribute("user");
+            if(!user) { // not logged-in
                 response.sendRedirect("/");
                 return;
             }
 
+            // these fields are mandatory
             var recipe = {
-                title: true,
-                content: true,
-                ingredients: true,
-                tags: true
-            };
+                title: "",
+                content: "",
+                ingredients: "",
+                tags: ""
+            }, error = "";
 
             var data = fileupload.getData(request);
 
+            var recipeId = null;
+
             // loop through the form fields and get values
-            for(var i=0; i<data.length; i++)
-                if(recipe[data[i].fieldName]) {
-                    if(data[i].fieldName == "content" || data[i].fieldName == "ingredients")
-                        data[i].fieldValue = new Text(data[i].fieldValue);
-                    if(data[i].fieldName == "tags")
-                        data[i].fieldValue = data[i].fieldValue.trim().split(" ");
+            for(i=0; i<data.length; i++) {
+                var fieldName = data[i].fieldName,
+                    fieldValue = data[i].fieldValue;
+                if(recipe[fieldName] === "") {
+                    if(fieldValue == "") {
+                        error = "Devi completare tutto";
+                    }
+                    if(fieldName == "content" || fieldName == "ingredients")
+                        fieldValue = new Text(fieldValue);
+                    if(fieldName == "tags")
+                        fieldValue = fieldValue.trim().split(" ");
 
-                    recipe[data[i].fieldName] = data[i].fieldValue;
+                    recipe[fieldName] = fieldValue;
                 }
+                if(fieldName == "recipeId")
+                    recipeId = fieldValue;
+            }
 
-            // save recipe
-            var entity = googlestore.entity("recipe", recipe);
-            var recipeKey = googlestore.put(entity);
+            if(error == "") {
+                // upload image only after all parameters are valid
+                var fullImageKey = null;
+                    thumbKey = null;
+                try {
+                    for(var i=0; i<data.length; i++)
+                        if(data[i].file && data[i].fieldName != "") { 
+                            var resized = imageresizer.resize(data[i].fieldValue, 224, 230),
+                                full = {
+                                    name: data[i].fieldName,
+                                    image: data[i].fieldValue
+                                },
+                                thumb = {
+                                    name: data[i].fieldName,
+                                    image: resized
+                                },
+                                fullImage = googlestore.entity("image", full),
+                                thumbImage = googlestore.entity("image", thumb);
 
-            var error = "";
-            var o = {error: error};
+                            fullImageKey = googlestore.put(fullImage);
+                            thumbKey = googlestore.put(thumbImage);
+
+                            break;
+                        }
+                } catch(e) {
+                    error = "Immagine troppo grande";
+                }
+            }
+
+            // when editing an image can be empty
+            if(!recipeId && error == "") {
+                if(!fullImageKey || !thumbKey)
+                    error = "Devi inserire un'immagine";
+            }
+
+            if(error == "") {
+                // set image references only if they exist
+                if(fullImageKey && thumbKey) {
+                    recipe.fullImageKey = fullImageKey;
+                    recipe.thumbKey = thumbKey;
+                }
+                recipe.userKey = user.getKey();
+
+                if(recipeId) { // edit
+                    var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+                        entity = googlestore.get(recipeKey);
+                    googlestore.set(entity, recipe);
+                } else
+                    var entity = googlestore.entity("recipe", recipe);
+                    
+                var recipeKey = googlestore.put(entity);
+
+                response.sendRedirect("/");
+                return;
+            }
+
+            recipe["getProperty"] = function(name) { // lol fake googlestore
+                return this[name];
+            }
+
+            var o = {error: error, recipeId: recipeId, recipe: recipe, tags: recipe.tags};
             require("./skins/add-edit.js", o);
             response.getWriter().println(o.out);
         }
     },
     "/edit-recipe/([a-zA-Z0-9_]+)" : {
         get: function(request, response, matches) {
-            if(!request.getAttribute("user")) { // not logged-in
+            var user = request.getAttribute("user");
+            if(!user) { // not logged-in
                 response.sendRedirect("/");
                 return;
             }
@@ -281,8 +363,12 @@ apejs.urls = {
             var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
                 recipe = googlestore.get(recipeKey);
 
+            // recipe.getProperty('tags') is an instance of java.util.Collection.
+            // need to convert it to a primitive array for JS to read it
+            var tags = recipe.getProperty("tags").toArray();
+
             var error = "";
-            var o = {error: error, recipeId:matches[1], recipe: recipe};
+            var o = {error: error, recipeId:matches[1], recipe: recipe, tags: tags};
             require("./skins/add-edit.js", o);
             response.getWriter().println(o.out);
         }

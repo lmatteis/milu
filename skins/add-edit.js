@@ -22,13 +22,11 @@ window.addEvent("domready", function(){\
             else
 			    this.out += '<h2 class="cabin">Inserisci Ricetta:</h2>';
 			
+            this.out += '<form action="/add" method="post" enctype="multipart/form-data">';
             if(this.recipeId) { // were editing it if
-                this.out += '<form action="/edit-recipe/'+this.recipeId+'" method="post" enctype="multipart/form-data">\
-                    <input type="hidden" name="recipeId" value="'+this.recipeId+'" />';
-            } else {
-                this.out += '<form action="/add" method="post" enctype="multipart/form-data">';
-            }
-				this.out +='<p>\
+                this.out += '<input type="hidden" name="recipeId" value="'+this.recipeId+'" />';
+            } 
+            this.out +='<p>\
 					<label for="image">Immagine:</label>\
                     <input id="image" type="file" name="image">';
 
@@ -46,23 +44,24 @@ window.addEvent("domready", function(){\
 				</p>\
 				<p>\
 					<label for="ingredients">Ingredienti: </label>\
-                    <textarea id="ingredients" name="ingredients">'+(this.recipe ? this.recipe.getProperty("ingredients").getValue():"")+'</textarea>\
+                    <textarea id="ingredients" name="ingredients">'+(this.recipe ? (this.recipe.getProperty("ingredients")!="" ? this.recipe.getProperty("ingredients").getValue():""):"")+'</textarea>\
 				</p>\
 				<p>\
 					<label for="tags">Tag: </label>';
 
                     var tagsString = "";
-                    if(this.recipe) {
-                        /*
-                        for(String tag : recipe.getTags()) {\
-                            tagsString += tag + " ";\
-                        }\
-                        */
+                    if(this.tags) {
+                        for(var i=0; i<this.tags.length; i++) {
+                            tagsString += this.tags[i] + " ";
+                        }
                     }
-                    this.out += '<input id="tags" type="text" name="tags" value="'+(this.recipe ? tagsString:"")+'"/>\
+                    this.out += '<input id="tags" type="text" name="tags" value="'+tagsString+'"/>\
 				</p>\
-				\
-				<p class="last-p"><button type="submit">Crea!</button></p>\
-			</form>\
+				';
+                if(this.recipeId) 
+                    this.out += '<p class="last-p"><button type="submit">Modifica!</button></p>';
+                else
+                    this.out += '<p class="last-p"><button type="submit">Crea!</button></p>';
+			this.out +='</form>\
         </div><!-- /link-form -->';
 require("./skins/footer.js", this);

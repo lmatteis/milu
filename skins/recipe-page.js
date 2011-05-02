@@ -1,5 +1,6 @@
 require("./skins/header.js", this);
 
+/*
 this.out += '<script>\
 $(function(){\
     \
@@ -43,10 +44,11 @@ $(function(){\
     resizeImg.apply($("#recipe_pic").get(0));\
 });\
 </script>\
-<div class="recipe">\
+*/
+this.out+='<div class="recipe">\
     <div class="recipe-left">\
         <div class="recipe-pic">\
-            <img id="recipe_pic" src="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png" />\
+            <img style="width:451px;" id="recipe_pic" src="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png" />\
         </div>\
         <div class="recipe-license">\
             <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="external">Creative Commons Attribution-Share Alike 3.0 License</a></p>\
@@ -71,7 +73,7 @@ $(function(){\
     <div class="recipe-right">';
         var user = _request.getAttribute("user");
         if(user && this.recipe.getProperty("userKey").equals(user.getKey())) {
-            this.out += '<div class="recipe-edit"><a href="/edit-recipe/<%=recipe.getKey().getId()%>">Modifica</a></div>';
+            this.out += '<div class="recipe-edit"><a href="/edit-recipe/'+recipe.getKey().getId()+'">Modifica</a></div>';
         }
         this.out += '<h1>'+this.recipe.getProperty("title")+'</h1>\
         <span class="recipe-author">by <a href="/users/'+recipeAuthor.getKey().getId()+'">'+recipeAuthor.getProperty("name")+'</a></span>\

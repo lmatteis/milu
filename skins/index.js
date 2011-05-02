@@ -1,7 +1,6 @@
 require("./skins/header.js", this);
 
 this.out += '<ul class="recipe_list large">';
-
 var counter = 0;
 for(var i=0; i<this.recipes.length; i++) {
     var recipe = this.recipes[i];

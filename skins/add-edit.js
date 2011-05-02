@@ -5,6 +5,7 @@ this.out += '<link rel="stylesheet" href="/stylesheets/MooEditable.css"> \
 <script> \
 window.addEvent("domready", function(){\
     $("content").mooEditable();\
+    $("ingredients").mooEditable();\
 });\
 </script> \
 <style>\
@@ -39,7 +40,7 @@ window.addEvent("domready", function(){\
                     <input id="title" type="text" name="title" value="'+(this.recipe ? this.recipe.getProperty("title"):"")+'" />\
 				</p>\
 				<p>\
-					<label for="content">Contenuto: </label>\
+					<label for="content">Preparazione: </label>\
                     <textarea id="content" name="content">'+(this.recipe ? (this.recipe.getProperty("content")!="" ? this.recipe.getProperty("content").getValue():""):"")+'</textarea>\
 				</p>\
 				<p>\

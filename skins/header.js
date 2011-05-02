@@ -36,6 +36,8 @@ if(!request.getRequestURI().equals("/add.jsp")) {\
 	<div id="header"> \
 		<ul> \
 			<li>';
+    this.out += '<a href="/">Home</a>\
+                <span class="light">&bull;</span>';
 var u;
 if(u = _request.getAttribute("user")) {
     this.out += '<a href="/users/'+u.getKey().getId()+'">'+u.getProperty("name")+'</a>\

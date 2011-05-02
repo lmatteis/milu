@@ -46,30 +46,38 @@ if(u = _request.getAttribute("user") && u.getKey().equals(this.thisUser.getKey()
 \
     </div>\
 </div>\
-<div style="margin-top: 10px;"></div>\
-\
-    <ul class="recipe_list large">';
+<div style="margin-top: 10px;"></div>';
+
+this.out += '<ul class="recipe_list large">';
 var counter = 0;
 for(var i=0; i<this.recipes.length; i++) {
-    //MyUser recipeUser = MyUser.getUserInfo(recipe.getUserKey());\
-    //List<RecipeComment> comments = RecipeComment.getCommentsForRecipe(recipe.getKey());\
+    var recipe = this.recipes[i];
     if(counter == 4) counter = 0;
     counter++;
-    
-    this.out +=' <li class="<%=(counter == 4 ? "last":"")%>" style="background: url(/serve/<%=recipe.getThumbKey().getId()%>.png) no-repeat;" alt="<%=recipe.getTitle()%>">\
-        <a class="image" href="/recipes/<%=recipe.getKey().getId()%>">\
+
+    var recipeUser = googlestore.get(recipe.getProperty("userKey"));
+
+    var q = googlestore.query("comment");
+    q.addFilter("recipeKey", "=", recipe.getKey());
+    var comments = q.fetch(50); 
+
+    this.out += '<li class="'+(counter == 4 ? "last":"")+'" style="background: url(/serve/'+recipe.getProperty("thumbKey").getId()+'.png) no-repeat;" alt="'+recipe.getProperty("title")+'">\
+        <a class="image" href="/recipes/'+recipe.getKey().getId()+'">\
         </a>\
         <div class="owner">\
-            <h2><a class="title" href="/recipes/<%=recipe.getKey().getId()%>">\
-                <%=recipe.getTitle()%>\
+            <h2><a class="title" href="/recipes/'+recipe.getKey().getId()+'">\
+                '+recipe.getProperty("title")+'\
             </a></h2>\
             <cite>\
-                by <a href="/users/<%=recipeUser.getKey().getId()%>"><%=recipeUser.getName()%></a>\
-                <em class="recipe_stats"><span class="recipe_stats_comment"><%=comments.size()%></span> </em>\
+                by <a href="/users/'+recipeUser.getKey().getId()+'">'+recipeUser.getProperty("name")+'</a>\
+                <em class="recipe_stats"><span class="recipe_stats_comment">'+comments.length+'</span> </em>\
             </cite>\
         </div>\
-    </li>';
+    </li>\
+';
 }
 this.out +='</ul>\
 <div class="page_break"></div>';
+
+this.out += '<div class="page_break"></div>';
 require("./skins/footer.js", this);

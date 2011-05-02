@@ -108,7 +108,7 @@ apejs.urls = {
 
             var res = q.fetch(1);
             if(!res.length) { // user not found 
-                var o = {error: "Email o password errata!"};
+                var o = {error: "Email o password sbagliata!"};
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else {
@@ -137,7 +137,10 @@ apejs.urls = {
                 userKey = googlestore.createKey("user", parseInt(userId)),
                 thisUser = googlestore.get(userKey),
                 // get this users recipes
-                recipes = []; // <- FIXME - implement
+                q = googlestore.query("recipe");
+
+            q.addFilter("userKey", "=", userKey);
+            var recipes = q.fetch(50); // fix me only 50?
 
             var o = { 
                 thisUser: thisUser,
@@ -329,14 +332,23 @@ apejs.urls = {
                 }
                 recipe.userKey = user.getKey();
 
+                // create an entity with keyName the tag itself so it's unique
+                for(var i=0; i<recipe.tags.length; i++) {
+                    var tagEntity = googlestore.entity("tag", recipe.tags[i], {});
+                    googlestore.put(tagEntity);
+                }
+
                 if(recipeId) { // edit
                     var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
                         entity = googlestore.get(recipeKey);
                     googlestore.set(entity, recipe);
-                } else
+                } else { // add it
+                    recipe.created = new java.util.Date();
                     var entity = googlestore.entity("recipe", recipe);
+                }
                     
                 var recipeKey = googlestore.put(entity);
+
 
                 response.sendRedirect("/");
                 return;

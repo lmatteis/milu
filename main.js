@@ -131,6 +131,7 @@ apejs.urls = {
         }
     },
     "/users/([a-zA-Z0-9_]+)" : {
+
         get: function(request, response, matches) {
             var userId = matches[1],
                 // create key from the user id

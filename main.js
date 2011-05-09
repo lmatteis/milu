@@ -5,6 +5,8 @@ require("./usermodel.js")
 require("./fileupload.js");
 require("./imageresizer.js");
 
+var MILU_URL = "http://milu-app.appspot.com";
+
 // this happens before the handler
 apejs.before = function(request, response) {
     // set UTF-8
@@ -57,7 +59,7 @@ apejs.urls = {
             }, o = {}, error = false;
 
             for(var i in user)
-                if(user[i] == "") error = "Devi completare tutto!";
+                if(!user[i] || user[i] == "") error = "Devi completare tutto!";
 
 
             if(usermodel.emailExists(user.email))
@@ -87,11 +89,17 @@ apejs.urls = {
                 var entity = googlestore.entity("user", user);
                 var userKey = googlestore.put(entity);
 
-                // store the actualy key in the session
-                var session = request.getSession(true);
-                session.setAttribute("userKey", userKey);
+                // dont login, send email
+                require("./sendemail.js");
+                try {
+                    sendemail.send(user.email, user.username, "Completa la registrazione", "Per completare la registrazione clicca qui: <a href='"+MILU_URL+"/activate?keyString="+KeyFactory.keyToString(userKey)+"'>attiva account</a>");
+                } catch(e) {
+                    response.getWriter().println(e.getMessage());
+                }
 
-                response.sendRedirect(request.getParameter("returnurl"));
+                var o = {error: "Ti e' stata mandata un'email con il link per l'attivazione del tuo account."};
+                require("./skins/login.js", o);
+                response.getWriter().println(o.out);
             }
                 
         }
@@ -115,6 +123,10 @@ apejs.urls = {
             var res = q.fetch(1);
             if(!res.length) { // user not found 
                 var o = {error: "Username o password sbagliata!"};
+                require("./skins/login.js", o);
+                response.getWriter().println(o.out);
+            } else if(!res[0].getProperty("active")) {
+                var o = {error: "Quest account non e' ancora attivo. Controlla la tua email"};
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else {
@@ -483,6 +495,29 @@ apejs.urls = {
             }
             
             response.getWriter().println("<script>window.top.fileuploadCallback('"+id+"', '"+error+"');</script>"); 
+        }
+    },
+    "/activate": {
+        get: function(request, response) {
+            function err(m) { return response.getWriter().println(m); }
+            // activate based on the user key string
+            var keyString = request.getParameter("keyString");
+            if(keyString == "" || !keyString)
+                return err("Key invalida");
+                
+            try {
+                var user = googlestore.get(KeyFactory.stringToKey(keyString));
+                if(user) {
+                    user.setProperty("active", true);
+                    googlestore.put(user);
+
+                    var o = {error: "Grazie per aver attivato il tuo account. Ora puoi procedere con il login."};
+                    require("./skins/login.js", o);
+                    response.getWriter().println(o.out);
+                }
+            } catch(e) {
+                return err("Key non trovata");
+            }
         }
     }
 };

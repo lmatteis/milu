@@ -10,7 +10,7 @@ if(u = _request.getAttribute("user")) {
 		this.out += '<h2 class="cabin">Login:</h2>';
 			
     this.out +='<form action="/login" method="post">\
-                <input type="hidden" name="returnurl" value="'+_request.getParameter("returnurl")+'" />\
+                <input type="hidden" name="returnurl" value="'+(_request.getParameter("returnurl") || "/")+'" />\
 				<p>\
 					<label for="username">Username:</label>\
                     <input id="username" type="text" name="username">\

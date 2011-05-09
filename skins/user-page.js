@@ -69,7 +69,7 @@ for(var i=0; i<this.recipes.length; i++) {
                 '+recipe.getProperty("title")+'\
             </a></h2>\
             <cite>\
-                by <a href="/users/'+recipeUser.getKey().getId()+'">'+recipeUser.getProperty("name")+'</a>\
+                by <a href="/users/'+recipeUser.getKey().getId()+'">'+recipeUser.getProperty("username")+'</a>\
                 <em class="recipe_stats"><span class="recipe_stats_comment">'+comments.length+'</span> </em>\
             </cite>\
         </div>\

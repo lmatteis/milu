@@ -51,7 +51,7 @@ apejs.urls = {
         post: function(request, response) {
             var user = {
                 created: new java.util.Date(),
-                name: request.getParameter("name"),
+                username: request.getParameter("username"),
                 email: request.getParameter("email"),
                 password: request.getParameter("password")
             }, o = {}, error = false;
@@ -59,14 +59,20 @@ apejs.urls = {
             for(var i in user)
                 if(user[i] == "") error = "Devi completare tutto!";
 
-            if(usermodel.exists(user.email))
+
+            if(usermodel.emailExists(user.email))
                 error = "Quest'email esiste!";
 
             // check email format
             if(!usermodel.validateEmail(user.email))
                 error = "Formato dell'email sbagliato";
 
+            if(usermodel.usernameExists(user.username))
+                error = "Questo username esiste gia', scegline un altro";
                 
+            if(!usermodel.validUsername(user.username))
+                error = "Assicurati che lo username non contenga nessuno spazio o carattere strano e che sia maggiore di 4 e minore di 21 caratteri";
+
             if(error) {
                 var o = { 
                     error: error,
@@ -99,16 +105,16 @@ apejs.urls = {
             response.getWriter().println(o.out);
         },
         post: function(request, response) {
-            var email = request.getParameter("email"),
+            var username = request.getParameter("username"),
                 password = request.getParameter("password");
 
             var q = googlestore.query("user");
-            q.addFilter("email", "=", email);
+            q.addFilter("username", "=", username);
             q.addFilter("password", "=", usermodel.sha1(password));
 
             var res = q.fetch(1);
             if(!res.length) { // user not found 
-                var o = {error: "Email o password sbagliata!"};
+                var o = {error: "Username o password sbagliata!"};
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else {
@@ -437,6 +443,46 @@ apejs.urls = {
 
             googlestore.put(comment);
             response.sendRedirect("/recipes/"+recipeKey.getId()+"#comments");
+        }
+    },
+    "/fileupload" : {
+        get: function(request, response) {
+        },
+        post: function(request, response) {
+            var data = fileupload.getData(request);
+            
+            var filename = "";
+                filevalue = "",
+                error = "";
+            for(var i=0; i<data.length; i++) {
+                var fieldName = data[i].fieldName,
+                    fieldValue = data[i].fieldValue,
+                    isFile = data[i].file;
+
+                if(isFile) {
+                    //err("Got file with name: "+fieldName+"<br>");
+                    filename = fieldName;
+                    filevalue = fieldValue;
+                } 
+            }
+            if(filename == "" || filevalue == "")
+                error = "Non hai caricato nessuna immagine";
+
+            var id = ""; // image id
+            if(error == "") {
+                try {
+                    var entity = googlestore.entity("image", {
+                        name: filename,
+                        image: filevalue
+                    });
+                    var key = googlestore.put(entity);
+                    id = key.getId();
+                } catch(e) {
+                    error = "Immagine troppo grande";
+                }
+            }
+            
+            response.getWriter().println("<script>window.top.fileuploadCallback('"+id+"', '"+error+"');</script>"); 
         }
     }
 };

@@ -76,7 +76,7 @@ this.out+='<div class="recipe">\
             this.out += '<div class="recipe-edit"><a href="/edit-recipe/'+recipe.getKey().getId()+'">Modifica</a></div>';
         }
         this.out += '<h1>'+this.recipe.getProperty("title")+'</h1>\
-        <span class="recipe-author">by <a href="/users/'+recipeAuthor.getKey().getId()+'">'+recipeAuthor.getProperty("name")+'</a></span>\
+        <span class="recipe-author">by <a href="/users/'+recipeAuthor.getKey().getId()+'">'+recipeAuthor.getProperty("username")+'</a></span>\
         <div class="recipe-ingredients">\
             <h3>Ingredienti:</h3>\
             <p>'+this.recipe.getProperty("ingredients").getValue()+'</p>\
@@ -107,7 +107,7 @@ this.out+='<div class="recipe">\
 
                 this.out +=' </div>\
                 <div class="comment-author">\
-                    <a href="/users/'+author.getKey().getId()+'">'+author.getProperty("name")+'</a>\
+                    <a href="/users/'+author.getKey().getId()+'">'+author.getProperty("username")+'</a>\
                 </div>\
                 <div class="comment-date">\
                     <a href="#">'+comment.getProperty("created")+'</a>\

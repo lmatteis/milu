@@ -7,13 +7,13 @@ if(u = _request.getAttribute("user")) {
     if(this.error)
 	    this.out += '<h2 class="cabin error">'+this.error+'</h2>';
     else
-		this.out += '<h2 class="cabin">Registrati:</h2>';
+		this.out += '<h2 class="cabin">Login:</h2>';
 			
     this.out +='<form action="/login" method="post">\
                 <input type="hidden" name="returnurl" value="'+_request.getParameter("returnurl")+'" />\
 				<p>\
-					<label for="email">Email:</label>\
-                    <input id="email" type="text" name="email">\
+					<label for="username">Username:</label>\
+                    <input id="username" type="text" name="username">\
 				</p>\
 				<p>\
 					<label for="password">Password:</label>\

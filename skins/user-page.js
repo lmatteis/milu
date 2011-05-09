@@ -24,10 +24,10 @@ if(u = _request.getAttribute("user") && u.getKey().equals(this.thisUser.getKey()
     this.out += '<table class="user-details">\
                         <tbody><tr>\
                             <td style="width: 120px;">\
-                                Nome\
+                                Username\
                             </td>\
                             <td style="width: 230px;">\
-                                <b>'+this.thisUser.getProperty("name")+'</b>\
+                                <b>'+this.thisUser.getProperty("username")+'</b>\
                             </td>\
                         </tr>\
                         \

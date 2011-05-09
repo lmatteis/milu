@@ -1,21 +1,12 @@
 require("./skins/header.js", this);
 this.out += '<link rel="stylesheet" href="/stylesheets/MooEditable.css"> \
-<script src="/js/mootools-yui-compressed.js"></script> \
-<script src="/js/MooEditable.js"></script> \
 <script> \
+     jQuery.noConflict();\
 window.addEvent("domready", function(){\
     $("content").mooEditable();\
     $("ingredients").mooEditable();\
 });\
 </script> \
-<style>\
-.mooeditable-container {\
-    float: right;\
-    width: 486px !important;\
-    height: 200px;\
-}\
-\
-</style>\
         <div id="link-form">';
 			
             if(this.error)
@@ -64,5 +55,6 @@ window.addEvent("domready", function(){\
                 else
                     this.out += '<p class="last-p"><button type="submit">Crea!</button></p>';
 			this.out +='</form>\
-        </div><!-- /link-form -->';
+        </div><!-- /link-form -->\
+        <iframe style="display: none;" name="upload_iframe"></iframe>';
 require("./skins/footer.js", this);

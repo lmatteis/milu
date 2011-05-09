@@ -1012,6 +1012,7 @@ MooEditable.Locale = {
 
 MooEditable.Locale.define({
 	ok: 'OK',
+	upload: 'Carica',
 	cancel: 'Cancel',
 	bold: 'Bold',
 	italic: 'Italic',
@@ -1028,6 +1029,7 @@ MooEditable.Locale.define({
 	selectTextHyperlink: 'Please select the text you wish to hyperlink.',
 	enterURL: 'Enter URL',
 	enterImageURL: 'Enter image URL',
+	enterImageFile: "Carica l'immagine",
 	addImage: 'Add Image',
 	toggleView: 'Toggle View'
 });
@@ -1328,6 +1330,45 @@ MooEditable.UI.PromptDialog = function(questionText, answerText, fn){
 	});
 };
 
+MooEditable.UI.FileUploadDialog = function(questionText, answerText, fn){
+	if (!questionText) return;
+	var html = '<form target="upload_iframe" action="/fileupload" method="post" enctype="multipart/form-data"><label class="dialog-label">' + questionText
+		+ ' <input name="file" type="file" class="text dialog-input" value="' + answerText + '">'
+		+ '</label> <button type="submit" class="dialog-button dialog-ok-button">' + MooEditable.Locale.get('upload') + '</button>'
+		+ '<button class="dialog-button dialog-cancel-button">' + MooEditable.Locale.get('cancel') + '</button><span class="error"></span></form>';
+	return new MooEditable.UI.Dialog(html, {
+		'class': 'mooeditable-prompt-dialog',
+		onOpen: function(){
+		},
+		onClick: function(e){
+			if (e.target.tagName.toLowerCase() != 'button') return;
+			var button = document.id(e.target);
+			var input = this.el.getElement('.dialog-input');
+			if (button.hasClass('dialog-cancel-button')){
+				//input.set('value', answerText);
+				this.close();
+			    e.preventDefault();
+			} else if (button.hasClass('dialog-ok-button')){
+                // let's define a global callback that the fileupload will call
+                var that = this;
+                jQuery(that.el).find(".error").text("Caricando...");
+                fileuploadCallback = function(imageId, error){
+                    if(error != "") {
+                        jQuery(that.el).find(".error").text(error);
+                        return;
+                    }
+                    jQuery(that.el).find(".error").text("");
+
+                    var url = "/serve/"+imageId+".png";
+                    that.close();
+                    if (fn) fn.attempt(url, this);
+                };
+                
+			}
+		}
+	});
+};
+
 MooEditable.Actions = {
 
 	bold: {
@@ -1506,7 +1547,7 @@ MooEditable.Actions = {
 		},
 		dialogs: {
 			prompt: function(editor){
-				return MooEditable.UI.PromptDialog(MooEditable.Locale.get('enterImageURL'), 'http://', function(url){
+				return MooEditable.UI.FileUploadDialog(MooEditable.Locale.get('enterImageFile'), 'http://', function(url){
 					editor.execute('insertimage', false, url.trim());
 				});
 			}

@@ -11,14 +11,9 @@ this.out = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 <link type="text/css" rel="stylesheet" href="/stylesheets/reset.css" /> \
 <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" /> \
  \
-<!--\
-<%\
-// avoid conflict with MooTools loaded under the add page\
-if(!request.getRequestURI().equals("/add.jsp")) {\
-%>\
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script> \
-<% } %>\
--->\
+<script src="/js/mootools-yui-compressed.js"></script> \
+<script src="/js/MooEditable.js"></script> \
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script> \
  \
 </head> \
 <body id="home"> \
@@ -40,7 +35,7 @@ if(!request.getRequestURI().equals("/add.jsp")) {\
                 <span class="light">&bull;</span>';
 var u;
 if(u = _request.getAttribute("user")) {
-    this.out += '<a href="/users/'+u.getKey().getId()+'">'+u.getProperty("name")+'</a>\
+    this.out += '<a href="/users/'+u.getKey().getId()+'">'+u.getProperty("username")+'</a>\
                 <span class="light">&bull;</span> \
 <a href="/add" id="newest_torrents">Inserisci Ricetta</a> \
                 <span class="light">&bull;</span> \

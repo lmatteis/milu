@@ -11,8 +11,8 @@ if(_request.getAttribute("user")) {
     this.out += '<form action="/register" method="post">\
                 <input type="hidden" name="returnurl" value="'+_request.getParameter("returnurl")+'" />\
 				<p>\
-					<label for="name">Nome:</label>\
-                    <input id="name" type="text" name="name" value="'+(this.user ? this.user.name : "")+'">\
+					<label for="username">Username:</label>\
+                    <input id="username" type="text" name="username" value="'+(this.user ? this.user.username : "")+'">\
 				</p>\
 				<p>\
 					<label for="email">Email:</label>\

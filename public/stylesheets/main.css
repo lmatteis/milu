@@ -866,6 +866,9 @@ font-weight: normal;
     margin-top: 20px;
     color: #333333;
 }
+.recipe .recipe-content img{
+    max-width: 420px;
+}
 .recipe .recipe-content-inner {
     padding: 20px;
     color: #151515;
@@ -993,5 +996,34 @@ margin: 0 0 1em 0;
 .recipe-right {
     float: right;
     width: 50%;
+}
+
+.mooeditable-container {
+    float: right;
+    width: 486px !important;
+    height: 200px;
+    background: #fff;
+}
+.mooeditable-container iframe{
+    height: 164px !important;
+}
+.mooeditable-container input {
+    float: none;
+    width: 300px !important;
+}
+.mooeditable-container button {
+    width: auto; 
+}
+.mooeditable-container .error  {
+    margin-left: 10px;
+}
+.mooeditable-container label {
+    float: none;
+}
+#content-mooeditable-container {
+    height: 400px;
+}
+#content-mooeditable-container iframe {
+    height: 364px !important;
 }
 

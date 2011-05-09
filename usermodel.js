@@ -1,7 +1,7 @@
 importPackage(java.lang);
 
 var usermodel = {
-    exists: function(email) {
+    emailExists: function(email) {
         var q = googlestore.query("user");
         q.addFilter("email", "=", email);
         var result = q.fetch(1);
@@ -9,6 +9,19 @@ var usermodel = {
             return true;
         else 
             return false;
+    },
+    usernameExists: function(username) {
+        var q = googlestore.query("user");
+        q.addFilter("username", "=", username);
+        var result = q.fetch(1);
+        if(result.length)
+            return true;
+        else 
+            return false;
+    },
+    validUsername: function(username) {
+        var re = /^(?=.{4})(?!.{21})[\w.-]*[a-z][\w-.]*$/i;
+        return username.match(re);
     },
     validateEmail: function(email){ 
          var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

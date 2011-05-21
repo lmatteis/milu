@@ -5,7 +5,7 @@ this.out += '\
  \
 	<div id="footer-wrapper"> \
 	<div id="footer"> \
-		<p>Copyright &copy; 2011 Milù.</p> \
+		<p>Copyright &copy; 2011 Il Grillo Mangiante.</p> \
 	</div> \
 	</div> \
  \

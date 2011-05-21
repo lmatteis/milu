@@ -5,7 +5,7 @@ this.out = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 <head> \
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />\
 \
-<title>Milu</title> \
+<title>Il Grillo Mangiante</title> \
  \
 <!-- just so dev is faster<link href=\'http://fonts.googleapis.com/css?family=Cabin:regular,bold\' rel="stylesheet" type="text/css">--> \
 <link type="text/css" rel="stylesheet" href="/stylesheets/reset.css" /> \
@@ -49,7 +49,7 @@ if(u = _request.getAttribute("user")) {
 }
             this.out +='</li>			\
 		</ul> \
-		<a href="/" id="logo"><h1>Milù</h1></a> \
+		<a href="/" id="logo"><h1>Il Grillo Mangiante</h1></a> \
 		<h2 class="cabin">Ricette di tutte le persone su questo mondo</h2> \
 	</div>	\
 	</div> \

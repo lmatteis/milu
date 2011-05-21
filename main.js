@@ -457,6 +457,31 @@ apejs.urls = {
             response.sendRedirect("/recipes/"+recipeKey.getId()+"#comments");
         }
     },
+    "/delete-comment" : {
+        get: function(request, response) {
+            var user = request.getAttribute("user");
+            if(!user) {
+                response.sendRedirect("/"); 
+                return;
+            }
+            var commentKeyString = request.getParameter("commentKeyString");
+
+            if(!commentKeyString || commentKeyString == "") {
+                response.sendRedirect("/"); 
+                return;
+            }
+
+            var commentKey = KeyFactory.stringToKey(commentKeyString);
+
+            // be sure this comment belongs to the logged in user
+            var c = googlestore.get(commentKey);
+            if(c.getProperty("userKey").equals(user.getKey())) {
+                googlestore.del(commentKey);        
+            }
+
+            response.sendRedirect("/recipes/"+c.getProperty("recipeKey").getId()+"#comments");
+        }
+    },
     "/fileupload" : {
         get: function(request, response) {
         },

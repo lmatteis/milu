@@ -112,8 +112,14 @@ this.out+='\
                     <a href="/users/'+author.getKey().getId()+'">'+author.getProperty("username")+'</a>\
                 </div>\
                 <div class="comment-date">\
-                    <a href="#">'+comment.getProperty("created")+'</a>\
-                </div>\
+                    <a href="#">'+comment.getProperty("created")+'</a>';
+
+                // if logged in and this comment is of user logged in
+                if(user && author.getKey().equals(user.getKey())) {
+                    this.out += ' - <a href="/delete-comment?commentKeyString='+KeyFactory.keyToString(comment.getKey())+'">Elimina</a>';
+                }
+
+                this.out += '</div>\
                 <div class="comment-itself">\
                 <p>\
                 '+comment.getProperty("comment").getValue().replaceAll("(\r\n)\\1+", "</p><p>").replaceAll("\r\n","<br />")+'\

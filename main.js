@@ -122,7 +122,7 @@ apejs.urls = {
 
             var res = q.fetch(1);
             if(!res.length) { // user not found 
-                var o = {error: "Username o password sbagliata!"};
+                var o = {error: "Username e/o password sbagliati"};
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else if(!res[0].getProperty("active")) {

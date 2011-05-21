@@ -16,7 +16,6 @@ $(function(){
         a.attr("href", link);
         a.append($this.clone());
 
-        console.log(a);
         $this.replaceWith(a);
     });
 

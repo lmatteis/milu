@@ -90,14 +90,14 @@ apejs.urls = {
                 var userKey = googlestore.put(entity);
 
                 // dont login, send email
+                var o = {error: "Ti e' stata mandata un'email con il link per l'attivazione del tuo account."};
                 require("./sendemail.js");
                 try {
-                    sendemail.send(user.email, user.username, "Completa la registrazione", "Per completare la registrazione clicca qui: <a href='"+MILU_URL+"/activate?keyString="+KeyFactory.keyToString(userKey)+"'>attiva account</a>");
+                    sendemail.send(user.email, user.username, "Completa la registrazione", "Per completare la registrazione clicca qui: "+MILU_URL+"/activate?keyString="+KeyFactory.keyToString(userKey)+"");
                 } catch(e) {
-                    response.getWriter().println(e.getMessage());
+                    o.error = e.getMessage();
                 }
 
-                var o = {error: "Ti e' stata mandata un'email con il link per l'attivazione del tuo account."};
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             }

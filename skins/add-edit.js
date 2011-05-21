@@ -3,8 +3,11 @@ this.out += '<link rel="stylesheet" href="/stylesheets/MooEditable.css"> \
 <script> \
      jQuery.noConflict();\
 window.addEvent("domready", function(){\
-    $("content").mooEditable();\
-    $("ingredients").mooEditable();\
+    var options = {\
+        extraCSS: "img{ max-width: 220px;}"\
+    };\
+    $("content").mooEditable(options);\
+    $("ingredients").mooEditable(options);\
 });\
 </script> \
         <div id="link-form">';

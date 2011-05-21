@@ -45,7 +45,9 @@ $(function(){\
 });\
 </script>\
 */
-this.out+='<div class="recipe">\
+this.out+='\
+<script type="text/javascript" src="/js/clean-recipe.js"></script>\
+<div class="recipe">\
     <div class="recipe-left">\
         <div class="recipe-pic">\
             <a target="_blank" href="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png"><img style="width:451px;" id="recipe_pic" src="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png" /></a>\
@@ -79,7 +81,7 @@ this.out+='<div class="recipe">\
         <span class="recipe-author">by <a href="/users/'+recipeAuthor.getKey().getId()+'">'+recipeAuthor.getProperty("username")+'</a></span>\
         <div class="recipe-ingredients">\
             <h3>Ingredienti:</h3>\
-            <p>'+this.recipe.getProperty("ingredients").getValue()+'</p>\
+            <div class="ingredients-content">'+this.recipe.getProperty("ingredients").getValue()+'</div>\
         </div>\
         <div class="recipe-comments">\
             <h2><a name="comments"></a>Commenti</h2>';

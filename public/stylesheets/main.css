@@ -10,7 +10,10 @@ body {
 }
 
 p { line-height: 150%; }
-ul { list-style: none; }
+ul { list-style: none; 
+
+    padding:0; margin:0;
+}
 
 #wrapper {
 	width: 100%;
@@ -865,9 +868,12 @@ font-weight: normal;
     line-height:160%;
     margin-top: 20px;
     color: #333333;
+    
 }
 .recipe .recipe-content img{
-    max-width: 420px;
+    max-width: 220px;
+    margin: auto;
+    display: block;
 }
 .recipe .recipe-content-inner {
     padding: 20px;
@@ -1026,4 +1032,5 @@ margin: 0 0 1em 0;
 #content-mooeditable-container iframe {
     height: 364px !important;
 }
+
 

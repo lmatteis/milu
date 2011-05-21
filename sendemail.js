@@ -4,7 +4,7 @@ importPackage(javax.mail.internet);
 
 var sendemail = {
     fromEmail: "lmatteis@gmail.com",
-    fromName: "Cucinarsi.it",
+    fromName: "Il Grillo Mangiante",
     send: function(toEmail, toName, toSubject, toBody) {
         var props = new Properties(),
             session = Session.getDefaultInstance(props, null);

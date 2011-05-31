@@ -32,6 +32,7 @@ apejs.urls = {
         get: function(request, response) {
             // get all recipes
             var recipes = googlestore.query("recipe")
+                            .sort("created", "DESC")
                             .fetch();
 
             // pass all this data to the skin
@@ -159,6 +160,7 @@ apejs.urls = {
                 // get this users recipes
                 recipes = googlestore.query("recipe")
                     .filter("userKey", "=", userKey)
+                    .sort("created", "DESC")
                     .fetch();
 
             var o = { 
@@ -550,6 +552,7 @@ apejs.urls = {
             var q = request.getParameter("q");
             // get all recipes
             var recipes = googlestore.query("recipe")
+                        .sort("created", "DESC")
                         .filter("tags", "=", q)
                         .fetch();
 

@@ -5,7 +5,7 @@ require("./usermodel.js")
 require("./fileupload.js");
 require("./imageresizer.js");
 
-var MILU_URL = "http://milu-app.appspot.com";
+var MILU_URL = "http://www.ilgrillomangiante.com";
 
 // this happens before the handler
 apejs.before = function(request, response) {
@@ -18,9 +18,10 @@ apejs.before = function(request, response) {
     var userKey = session.getAttribute("userKey");
 
     // find user with this key and set an attribute
-    var user = googlestore.get(userKey);
-
-    request.setAttribute("user", user);
+    try {
+        var user = googlestore.get(userKey);
+        request.setAttribute("user", user);
+    } catch(e) {}
 
     // set the request to be global
     _request = request;
@@ -30,8 +31,8 @@ apejs.urls = {
     "/": {
         get: function(request, response) {
             // get all recipes
-            var q = googlestore.query("recipe");
-            var recipes = q.fetch(10);
+            var recipes = googlestore.query("recipe")
+                            .fetch();
 
             // pass all this data to the skin
             var o = { 
@@ -542,6 +543,22 @@ apejs.urls = {
             } catch(e) {
                 return err("Key non trovata");
             }
+        }
+    },
+    "/search": {
+        get: function(request, response) {
+            var q = request.getParameter("q");
+            // get all recipes
+            var recipes = googlestore.query("recipe")
+                        .filter("tags", "=", q)
+                        .fetch();
+
+            // pass all this data to the skin
+            var o = { 
+                recipes: recipes
+            };
+            require("./skins/index.js", o);
+            response.getWriter().println(o.out);
         }
     }
 };

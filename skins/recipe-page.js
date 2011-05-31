@@ -52,9 +52,9 @@ this.out+='\
         <div class="recipe-pic">\
             <a target="_blank" href="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png"><img style="width:451px;" id="recipe_pic" src="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png" /></a>\
         </div>\
-        <div class="recipe-license">\
-            <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="external">Creative Commons Attribution-Share Alike 3.0 License</a></p>\
-        </div>\
+        <!--<div class="recipe-license">\
+            <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="external">Creative Commons Attribution-Share Alike 3.0 License</a></p> \
+        </div>-->\
         <div class="recipe-content">\
             '+this.recipe.getProperty("content").getValue()+'\
         </div>\

@@ -5,7 +5,14 @@ this.out = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 <head> \
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />\
 \
-<title>Il Grillo Mangiante</title> \
+<title>';
+
+// set the title of the recipe as title of html page
+if(this.recipe) {
+    this.out += this.recipe.getProperty("title") + " | ";
+}
+
+this.out += 'Il Grillo Mangiante</title> \
  \
 <!-- just so dev is faster<link href=\'http://fonts.googleapis.com/css?family=Cabin:regular,bold\' rel="stylesheet" type="text/css">--> \
 <link type="text/css" rel="stylesheet" href="/stylesheets/reset.css" /> \

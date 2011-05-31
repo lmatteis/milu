@@ -92,6 +92,11 @@ this.out+='\
         <input type="submit" value="Aggiungi commento" />\
     </form>';
     }
+    
+    if(!user)
+        this.out += '<p>Fai <a href="/login?returnurl='+_request.getRequestURI()+'">login</a> o <a href="/register?returnurl='+_request.getRequestURI()+'">registrati</a> per aggiungere un commento.</p>'
+    if(!this.comments.length)
+        this.out += '<p>Nessun commento.</p>';
     for(var i=0; i<this.comments.length; i++) {
         var comment = this.comments[i];
         var author = googlestore.get(comment.getProperty("userKey"));

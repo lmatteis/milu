@@ -116,11 +116,11 @@ apejs.urls = {
             var username = request.getParameter("username"),
                 password = request.getParameter("password");
 
-            var q = googlestore.query("user");
-            q.addFilter("username", "=", username);
-            q.addFilter("password", "=", usermodel.sha1(password));
+            var res = googlestore.query("user")
+                    .filter("username", "=", username)
+                    .filter("password", "=", usermodel.sha1(password))
+                    .fetch(1);
 
-            var res = q.fetch(1);
             if(!res.length) { // user not found 
                 var o = {error: "Username e/o password sbagliati"};
                 require("./skins/login.js", o);
@@ -156,10 +156,9 @@ apejs.urls = {
                 userKey = googlestore.createKey("user", parseInt(userId)),
                 thisUser = googlestore.get(userKey),
                 // get this users recipes
-                q = googlestore.query("recipe");
-
-            q.addFilter("userKey", "=", userKey);
-            var recipes = q.fetch(50); // fix me only 50?
+                recipes = googlestore.query("recipe")
+                    .filter("userKey", "=", userKey)
+                    .fetch();
 
             var o = { 
                 thisUser: thisUser,
@@ -415,9 +414,9 @@ apejs.urls = {
             var recipeAuthor = googlestore.get(recipe.getProperty("userKey"));
 
             // get comments for this recipe
-            var q = googlestore.query("comment");
-            q.addFilter("recipeKey", "=", recipe.getKey());
-            var comments = q.fetch(50); // FIXME limiting comments to 50
+            var comments = googlestore.query("comment")
+                    .filter("recipeKey", "=", recipe.getKey())
+                    .fetch();
 
             var o = {
                 recipe: recipe, 

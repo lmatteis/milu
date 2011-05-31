@@ -9,9 +9,9 @@ for(var i=0; i<this.recipes.length; i++) {
 
     var recipeUser = googlestore.get(recipe.getProperty("userKey"));
 
-    var q = googlestore.query("comment");
-    q.addFilter("recipeKey", "=", recipe.getKey());
-    var comments = q.fetch(50); 
+    var comments = googlestore.query("comment")
+            .filter("recipeKey", "=", recipe.getKey())
+            .fetch();
 
     this.out += '<li class="'+(counter == 4 ? "last":"")+'" style="background: url(/serve/'+recipe.getProperty("thumbKey").getId()+'.png) no-repeat;" alt="'+recipe.getProperty("title")+'">\
         <a class="image" href="/recipes/'+recipe.getKey().getId()+'">\

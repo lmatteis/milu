@@ -160,7 +160,7 @@ apejs.urls = {
                 // get this users recipes
                 recipes = googlestore.query("recipe")
                     .filter("userKey", "=", userKey)
-                    .sort("created", "DESC")
+                    //.sort("created", "DESC")
                     .fetch();
 
             var o = { 
@@ -552,7 +552,7 @@ apejs.urls = {
             var q = request.getParameter("q");
             // get all recipes
             var recipes = googlestore.query("recipe")
-                        .sort("created", "DESC")
+                        //.sort("created", "DESC")
                         .filter("tags", "=", q)
                         .fetch();
 

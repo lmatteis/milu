@@ -15,9 +15,12 @@ if(this.thisUser.getProperty("imageKey")) {
 var u;
 if(u = _request.getAttribute("user") && u.getKey().equals(this.thisUser.getKey())) {
 
-    this.out += '<div style="float: right;" id="user-menu">\
+    this.out += '<div style="float: right;text-align: right;" id="user-menu">\
                     <div id="account-recovery-form">\
                         <a href="/edit">Modifica</a>\
+                    </div>\
+                    <div id="account-recovery-form">\
+                        <a href="/add">Inserisci Ricetta</a>\
                     </div>\
                 </div>';
 }
@@ -28,6 +31,14 @@ if(u = _request.getAttribute("user") && u.getKey().equals(this.thisUser.getKey()
                             </td>\
                             <td style="width: 230px;">\
                                 <b>'+this.thisUser.getProperty("username")+'</b>\
+                            </td>\
+                        </tr>\
+                        <tr>\
+                            <td style="width: 120px;">\
+                                Città\
+                            </td>\
+                            <td style="width: 230px;">\
+                                <b>'+this.thisUser.getProperty("city")+'</b>\
                             </td>\
                         </tr>\
                         \

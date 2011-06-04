@@ -150,12 +150,28 @@ apejs.urls = {
             response.sendRedirect(returnUrl);
         }
     },
+    "/users" : {
+        get: function(request, response) {
+            var print = printer(response);
+
+            var users = googlestore.query("user")
+                            .sort("created", "DESC")
+                            .fetch();
+
+            var o = { 
+                users: users
+            };
+            require("./skins/users.js", o);
+            print(o.out);
+
+        }
+    },
     "/users/([a-zA-Z0-9_]+)" : {
 
         get: function(request, response, matches) {
             var userId = matches[1],
                 // create key from the user id
-                userKey = googlestore.createKey("user", parseInt(userId)),
+                userKey = googlestore.createKey("user", parseInt(userId, 10)),
                 thisUser = googlestore.get(userKey),
                 // get this users recipes
                 recipes = googlestore.query("recipe")
@@ -198,7 +214,7 @@ apejs.urls = {
                 // upload the image first so we get imageKey
                 for(var i=0; i<data.length; i++) {
                     if(data[i].file && data[i].fieldName != "") { 
-                        var resized = imageresizer.resize(data[i].fieldValue, 128, 128),
+                        var resized = imageresizer.resizeWithoutCrop(data[i].fieldValue, 128, 128),
                             o = {
                                 name: data[i].fieldName,
                                 image: resized // this is the actual blob
@@ -224,12 +240,15 @@ apejs.urls = {
 
                 // now iterate over it again but only for form fields
                 for(i=0; i<data.length; i++) {
-                    if(!data[i].file && data[i].fieldName == "name") {
-                        user.setProperty("name", data[i].fieldValue);
-                        if(imageKey)
-                            user.setProperty("imageKey", imageKey);
+                    if(!data[i].file) {
+                        if(data[i].fieldName == "name")
+                            user.setProperty("name", data[i].fieldValue);
+                        if(data[i].fieldName == "city")
+                            user.setProperty("city", data[i].fieldValue);
                     }
                 }
+                if(imageKey)
+                    user.setProperty("imageKey", imageKey);
 
                 googlestore.put(user);
             } catch(e) {
@@ -251,7 +270,7 @@ apejs.urls = {
 
             var imageId = matches[1],
                 // create key from the user id
-                imageKey = googlestore.createKey("image", parseInt(imageId)),
+                imageKey = googlestore.createKey("image", parseInt(imageId, 10)),
                 image = googlestore.get(imageKey);
 
             var imageBlob = image.getProperty("image"),
@@ -360,7 +379,7 @@ apejs.urls = {
                 }
 
                 if(recipeId) { // edit
-                    var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+                    var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
                         entity = googlestore.get(recipeKey);
                     googlestore.set(entity, recipe);
                 } else { // add it
@@ -393,7 +412,7 @@ apejs.urls = {
             }
             var recipeId = matches[1];
 
-            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
                 recipe = googlestore.get(recipeKey);
 
             // recipe.getProperty('tags') is an instance of java.util.Collection.
@@ -407,10 +426,27 @@ apejs.urls = {
         }
 
     },
+    "/delete-recipe/([a-zA-Z0-9_]+)" : {
+        get: function(request, response, matches) {
+            var user = request.getAttribute("user");
+            if(!user) { // not logged-in
+                response.sendRedirect("/error");
+                return;
+            }
+            var recipeId = matches[1];
+
+            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10));
+
+            googlestore.del(recipeKey);
+                
+            response.sendRedirect("/");
+        }
+
+    },
     "/recipes/([a-zA-Z0-9_]+)" : {
         get: function(request, response, matches) {
             var recipeId = matches[1],
-                recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+                recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
                 recipe = googlestore.get(recipeKey);
 
             var tags = recipe.getProperty("tags").toArray();
@@ -565,3 +601,9 @@ apejs.urls = {
         }
     }
 };
+
+// simple syntax sugar
+function printer(response) {
+    var writer = response.getWriter();
+    return writer.print.bind(writer);
+}

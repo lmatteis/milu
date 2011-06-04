@@ -21,7 +21,7 @@ this.out += 'Il Grillo Mangiante</title> \
 <script src="/js/mootools-yui-compressed.js"></script> \
 <script src="/js/MooEditable.js"></script> \
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script> \
- \
+<script type="text/javascript" src="/js/ui.js"></script> \
 </head> \
 <body id="home"> \
 	\
@@ -38,13 +38,11 @@ this.out += 'Il Grillo Mangiante</title> \
 	<div id="header"> \
 		<ul> \
 			<li>';
-    this.out += '<a href="/">Home</a>\
+    this.out += '<a href="/">Home</a><span class="light">&bull;</span><a href="/users">Utenti</a>\
                 <span class="light">&bull;</span>';
 var u;
 if(u = _request.getAttribute("user")) {
-    this.out += '<a href="/users/'+u.getKey().getId()+'">'+u.getProperty("username")+'</a>\
-                <span class="light">&bull;</span> \
-<a href="/add" id="newest_torrents">Inserisci Ricetta</a> \
+    this.out += '<a href="/users/'+u.getKey().getId()+'">Profilo</a>\
                 <span class="light">&bull;</span> \
  <a href="/logout?returnurl='+_request.getRequestURI()+'">Logout</a> \
 ';

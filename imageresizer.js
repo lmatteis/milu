@@ -44,5 +44,19 @@ var imageresizer = {
 
         return new Blob(imageBytes);
 
+    },
+    resizeWithoutCrop: function(blob, width, height) {
+        var imageBytes = blob.getBytes();
+
+        var imagesService = ImagesServiceFactory.getImagesService();
+        var currImage = ImagesServiceFactory.makeImage(imageBytes);
+
+        // resize to width from parameters + 100 - just some padding
+        var resize = ImagesServiceFactory.makeResize(width, height);
+        currImage = imagesService.applyTransform(resize, currImage);
+        imageBytes = currImage.getImageData();
+
+        return new Blob(imageBytes);
+        
     }
 }

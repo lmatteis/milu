@@ -17,11 +17,11 @@ for(var i=0; i<this.recipes.length; i++) {
         <a class="image" href="/recipes/'+recipe.getKey().getId()+'">\
         </a>\
         <div class="owner">\
-            <h2><a class="title" href="/recipes/'+recipe.getKey().getId()+'">\
+            <h2><a title="'+recipe.getProperty("title")+'" class="title" href="/recipes/'+recipe.getKey().getId()+'">\
                 '+recipe.getProperty("title")+'\
             </a></h2>\
             <cite>\
-                by <a href="/users/'+recipeUser.getKey().getId()+'">'+recipeUser.getProperty("username")+'</a>\
+                di <a href="/users/'+recipeUser.getKey().getId()+'">'+recipeUser.getProperty("username")+'</a>\
                 <em class="recipe_stats"><span class="recipe_stats_comment">'+comments.length+'</span> </em>\
             </cite>\
         </div>\

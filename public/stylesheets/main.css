@@ -846,6 +846,7 @@ font-weight: normal;
 }
 .recipe .recipe-edit {
     float: right;
+    text-align: right;
 }
 .recipe .recipe-author,
 .recipe .recipe-author a {
@@ -1031,6 +1032,28 @@ margin: 0 0 1em 0;
 }
 #content-mooeditable-container iframe {
     height: 364px !important;
+}
+
+
+.user-info {
+height: 85px;
+width: 230px;
+margin: 8px 5px;
+overflow: hidden;
+float: left;
+}
+
+.user-info .user-gravatar48 {
+float: left;
+width: 48px;
+height: 48px;
+}
+.user-info .user-details {
+float: left;
+margin-left: 5px;
+width: 145px;
+overflow: hidden;
+white-space: nowrap;
 }
 
 

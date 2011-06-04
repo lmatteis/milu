@@ -75,7 +75,7 @@ this.out+='\
     <div class="recipe-right">';
         var user = _request.getAttribute("user");
         if(user && this.recipe.getProperty("userKey").equals(user.getKey())) {
-            this.out += '<div class="recipe-edit"><a href="/edit-recipe/'+recipe.getKey().getId()+'">Modifica</a></div>';
+            this.out += '<div class="recipe-edit"><a href="/edit-recipe/'+recipe.getKey().getId()+'">Modifica</a><br><a id="delete_recipe" href="/delete-recipe/'+recipe.getKey().getId()+'">Elimina</a></div>';
         }
         this.out += '<h1>'+this.recipe.getProperty("title")+'</h1>\
         <span class="recipe-author">by <a href="/users/'+recipeAuthor.getKey().getId()+'">'+recipeAuthor.getProperty("username")+'</a></span>\

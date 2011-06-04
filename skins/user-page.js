@@ -38,7 +38,7 @@ if(u = _request.getAttribute("user") && u.getKey().equals(this.thisUser.getKey()
                                 Città\
                             </td>\
                             <td style="width: 230px;">\
-                                <b>'+this.thisUser.getProperty("city")+'</b>\
+                                <b>'+(this.thisUser.getProperty("city")||"")+'</b>\
                             </td>\
                         </tr>\
                         \

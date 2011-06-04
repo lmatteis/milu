@@ -435,7 +435,14 @@ apejs.urls = {
             }
             var recipeId = matches[1];
 
-            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10));
+            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
+                recipe = googlestore.get(recipeKey);
+
+            // check that this recipe belongs to this user
+            if(!recipe.getProperty("userKey").equals(user.getKey())) {
+                response.sendRedirect("/error");
+                return;
+            }
 
             googlestore.del(recipeKey);
                 

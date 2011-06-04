@@ -65,17 +65,17 @@ apejs.urls = {
 
 
             if(usermodel.emailExists(user.email))
-                error = "Quest'email esiste!";
+                error = "Questo indirizzo di posta elettronica è già associato ad un altro account!";
 
             // check email format
             if(!usermodel.validateEmail(user.email))
-                error = "Formato dell'email sbagliato";
+                error = "Il formato dell'indirizzo di posta elettronica non è corretto!";
 
             if(usermodel.usernameExists(user.username))
-                error = "Questo username esiste gia', scegline un altro";
+                error = "Questo username esiste già, scegline un altro!";
                 
             if(!usermodel.validUsername(user.username))
-                error = "Assicurati che lo username non contenga nessuno spazio o carattere strano e che sia maggiore di 4 e minore di 21 caratteri";
+                error = "Assicurati che lo username non contenga nessuno spazio o carattere non ammesso e che sia maggiore di 3 e minore di 21 caratteri!";
 
             if(error) {
                 var o = { 
@@ -92,7 +92,7 @@ apejs.urls = {
                 var userKey = googlestore.put(entity);
 
                 // dont login, send email
-                var o = {error: "Ti e' stata mandata un'email con il link per l'attivazione del tuo account."};
+                var o = {error: "Ti è stata inviata una email con il link per l'attivazione del tuo account!"};
                 require("./sendemail.js");
                 try {
                     sendemail.send(user.email, user.username, "Completa la registrazione", "Per completare la registrazione clicca qui: "+MILU_URL+"/activate?keyString="+KeyFactory.keyToString(userKey)+"");
@@ -128,7 +128,7 @@ apejs.urls = {
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else if(!res[0].getProperty("active")) {
-                var o = {error: "Quest account non e' ancora attivo. Controlla la tua email"};
+                var o = {error: "Questo account non è ancora attivo. Controlla la tua casella di posta elettronica!"};
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else {
@@ -200,7 +200,7 @@ apejs.urls = {
         post: function(request, response) {
             var user = request.getAttribute("user");
             if(!user) {
-                response.getWriter().println("Devi fare il login per accedere a questa pagina");
+                response.getWriter().println("Esegui il login per accedere a questa pagina!");
                 return;
             }
 
@@ -241,8 +241,8 @@ apejs.urls = {
                 // now iterate over it again but only for form fields
                 for(i=0; i<data.length; i++) {
                     if(!data[i].file) {
-                        if(data[i].fieldName == "name")
-                            user.setProperty("name", data[i].fieldValue);
+                        if(data[i].fieldName == "bio")
+                            user.setProperty("bio", data[i].fieldValue);
                         if(data[i].fieldName == "city")
                             user.setProperty("city", data[i].fieldValue);
                     }
@@ -252,7 +252,7 @@ apejs.urls = {
 
                 googlestore.put(user);
             } catch(e) {
-                error = "L'immagine e' troppo grande. Prova a ridimensionarla";
+                error = "L'immagine è troppo grande, prova a ridimensionarla!";
             }
 
             if(error != "") {
@@ -316,7 +316,7 @@ apejs.urls = {
                     fieldValue = data[i].fieldValue;
                 if(recipe[fieldName] === "") {
                     if(fieldValue == "") {
-                        error = "Devi completare tutto";
+                        error = "Devi completare tutto!";
                     }
                     if(fieldName == "content" || fieldName == "ingredients")
                         fieldValue = new Text(fieldValue);
@@ -354,14 +354,14 @@ apejs.urls = {
                             break;
                         }
                 } catch(e) {
-                    error = "Immagine troppo grande";
+                    error = "L'immagine è troppo grande, prova a ridimensionarla!";
                 }
             }
 
             // when editing an image can be empty
             if(!recipeId && error == "") {
                 if(!fullImageKey || !thumbKey)
-                    error = "Devi inserire un'immagine";
+                    error = "Inserisci un'immagine!";
             }
 
             if(error == "") {
@@ -560,7 +560,7 @@ apejs.urls = {
                     var key = googlestore.put(entity);
                     id = key.getId();
                 } catch(e) {
-                    error = "Immagine troppo grande";
+                    error = "L'immagine è troppo grande, prova a ridimensionarla!";
                 }
             }
             
@@ -581,7 +581,7 @@ apejs.urls = {
                     user.setProperty("active", true);
                     googlestore.put(user);
 
-                    var o = {error: "Grazie per aver attivato il tuo account. Ora puoi procedere con il login."};
+                    var o = {error: "Grazie per aver attivato il tuo account. Ora puoi procedere con il login!"};
                     require("./skins/login.js", o);
                     response.getWriter().println(o.out);
                 }

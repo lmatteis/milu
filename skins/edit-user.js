@@ -20,12 +20,12 @@ else
 
 				this.out += '</p>\
 				<p>\
-					<label for="nome">Nome:</label>\
-                    <input id="nome" type="text" name="name" value="'+(u.getProperty("name") || "")+'">\
-				</p>\
-				<p>\
 					<label for="city">Città:</label>\
                     <input id="city" type="text" name="city" value="'+(u.getProperty("city") || "")+'">\
+				</p>\
+				<p>\
+					<label for="bio">Su di me:</label>\
+                    <textarea id="bio" name="bio">'+(u.getProperty("bio") || "")+'</textarea>\
 				</p>\
 				\
 				<p class="last-p"><button type="submit">Modifica!</button></p>\

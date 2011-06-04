@@ -41,6 +41,14 @@ if(u = _request.getAttribute("user") && u.getKey().equals(this.thisUser.getKey()
                                 <b>'+(this.thisUser.getProperty("city")||"")+'</b>\
                             </td>\
                         </tr>\
+                        <tr>\
+                            <td style="width: 120px;">\
+                                Su di me\
+                            </td>\
+                            <td style="width: 230px;">\
+                                <b>'+(this.thisUser.getProperty("bio")||"")+'</b>\
+                            </td>\
+                        </tr>\
                         \
                     </tbody></table>\
                 </td>\

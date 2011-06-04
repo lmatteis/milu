@@ -114,7 +114,7 @@ this.out+='\
 
                 var past = comment.getProperty("created");        
                 var now = new Date();
-                var ago = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+                var ago = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
                 var unit = "giorni";
                 if(ago == 1)
                     unit = "giorno"

@@ -49,14 +49,19 @@ a:hover { text-decoration: underline; }
 }
 
 	#header h1 {
-		font-family: "Gotham Rounded", "Helvetica Rounded", "Arial Rounded", "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-family: "Pacifico","Lobster","Gotham Rounded", "Helvetica Rounded", "Arial Rounded", "Helvetica Neue", Helvetica, Arial, sans-serif;
 		float: left;
 		font-size: 3em;
 		color: #6A4A3C;
 		display: block;
 		margin: 25px auto 5px;
 		border-bottom: 1px dashed white;
+        text-shadow: 2px 2px 1px #999;
 	}
+    h2.cabin {
+        margin-top: 20px;
+
+    }
 	
 	#logo:hover { text-decoration: none; }
 	#logo:hover h1 { color: #333; }

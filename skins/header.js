@@ -17,6 +17,8 @@ this.out += 'Il Grillo Mangiante</title> \
 <!-- just so dev is faster<link href=\'http://fonts.googleapis.com/css?family=Cabin:regular,bold\' rel="stylesheet" type="text/css">--> \
 <link type="text/css" rel="stylesheet" href="/stylesheets/reset.css" /> \
 <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" /> \
+<link href="http://fonts.googleapis.com/css?family=Copse" rel="stylesheet" type="text/css">\
+<link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">\
  \
 <script src="/js/mootools-yui-compressed.js"></script> \
 <script src="/js/MooEditable.js"></script> \
@@ -55,7 +57,7 @@ if(u = _request.getAttribute("user")) {
             this.out +='</li>			\
 		</ul> \
 		<a href="/" id="logo"><h1>Il Grillo Mangiante</h1></a> \
-		<!--<h2 class="cabin">Ricette di tutte le persone su questo mondo</h2>--> \
+		<h2 class="cabin">Crea e condividi le tue ricette</h2> \
 	</div>	\
 	</div> \
  \

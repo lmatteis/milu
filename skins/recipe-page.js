@@ -112,12 +112,23 @@ this.out+='\
                         </a>';
                     }
 
+                var past = comment.getProperty("created");        
+                var now = new Date();
+                var ago = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime()),                   unit = "ore";
+                if(ago == 0) {
+                    ago = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+                    unit = "minuti";
+                }
+                if(ago == 0) {
+                    ago = java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+                    unit = "secondi";
+                }
                 this.out +=' </div>\
                 <div class="comment-author">\
                     <a href="/users/'+author.getKey().getId()+'">'+author.getProperty("username")+'</a>\
                 </div>\
                 <div class="comment-date">\
-                    <a href="#">'+comment.getProperty("created")+'</a>';
+                    <a href="#">'+ago+' '+unit+' fa</a>';
 
                 // if logged in and this comment is of user logged in
                 if(user && author.getKey().equals(user.getKey())) {

@@ -1,6 +1,6 @@
 require("./skins/header.js", this);
 if(_request.getAttribute("user")) {
-    this.out += "Sei gia' registrato";
+    this.out += "Sei già registrato";
 } else {
     this.out += '<div id="link-form">';
     if(this.error)

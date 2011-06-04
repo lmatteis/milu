@@ -1,10 +1,11 @@
 $(function(){
 
     // add ... to recipe name if it's too long
-    var $title = $(".recipe_list li a.title"),
-        len = 23,
-        title = $title.text().trim();
-    if(title.length > len) {
-        $title.text( title.substring(0, len) + "..." );
-    }
+    var len = 23;
+    $(".recipe_list li a.title").each(function(){
+        var $this = $(this),   
+            title = $this.text().trim();
+        if(title.length > len)
+            $this.text( title.substring(0, len) + "..." );
+    });
 });

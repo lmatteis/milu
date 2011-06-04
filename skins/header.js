@@ -55,7 +55,7 @@ if(u = _request.getAttribute("user")) {
             this.out +='</li>			\
 		</ul> \
 		<a href="/" id="logo"><h1>Il Grillo Mangiante</h1></a> \
-		<h2 class="cabin">Ricette di tutte le persone su questo mondo</h2> \
+		<!--<h2 class="cabin">Ricette di tutte le persone su questo mondo</h2>--> \
 	</div>	\
 	</div> \
  \

@@ -610,18 +610,27 @@ apejs.urls = {
     "/search": {
         get: function(request, response) {
             var q = request.getParameter("q");
-            // get all recipes
-            var recipes = googlestore.query("recipe")
-                        .sort("created", "DESC")
-                        .filter("tags", "=", q)
-                        .fetch();
+            var o = { };
+            require("./skins/header.js", o);
+                
+            o.out += render("./skins/googlesearch.html");
 
-            // pass all this data to the skin
-            var o = { 
-                recipes: recipes
-            };
-            require("./skins/index.js", o);
+            require("./skins/footer.js", o);
             response.getWriter().println(o.out);
+                // get all recipes
+                /*
+                var recipes = googlestore.query("recipe")
+                            .sort("created", "DESC")
+                            .filter("tags", "=", q)
+                            .fetch();
+
+                // pass all this data to the skin
+                var o = { 
+                    recipes: recipes
+                };
+                require("./skins/index.js", o);
+                response.getWriter().println(o.out);
+                */
         }
     }
 };

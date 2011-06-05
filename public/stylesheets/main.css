@@ -88,6 +88,9 @@ a:hover { text-decoration: underline; }
         -webkit-border-radius: 99px; /* Safari, Chrome */
         margin-top: 15px;
     }
+    iframe {
+        width: 100%;
+    }
 	
 	#footer ul {
 	    margin-top: 20px;

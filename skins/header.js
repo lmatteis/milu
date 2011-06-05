@@ -57,7 +57,17 @@ this.out += 'Il Grillo Mangiante</title> \
     }
                 this.out +='</li>			\
             </ul> \
-            <div class="search"><input type="text" placeholder="Cerca..." /></div>\
+            <div class="search">\
+<form action="/search" id="cse-search-box">\
+  <div>\
+    <input type="hidden" name="cx" value="013135011952329865909:f3l43vc3uru" />\
+    <input type="hidden" name="cof" value="FORID:10" />\
+    <input type="hidden" name="ie" value="UTF-8" />\
+    <input type="text" name="q" size="31" placeholder="Cerca..."/>\
+    <input type="submit" style="display: none;" name="sa" value="Cerca" />\
+  </div>\
+</form>\
+            </div>\
         </div><!--/nav_search-->\
 		<a href="/" id="logo"><h1>Il Grillo Mangiante</h1></a> \
 		<h2 class="cabin">Crea e condividi le tue ricette</h2> \

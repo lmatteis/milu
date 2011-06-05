@@ -53,7 +53,7 @@ this.out+='\
             <a target="_blank" href="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png"><img style="width:451px;" id="recipe_pic" src="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png" /></a>\
         </div>\
         <div class="recipe-license">\
-        <div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="" send="false" width="450" show_faces="true" font=""></fb:like>\
+        <div id="fb-root"></div><script src="http://connect.facebook.net/it_IT/all.js#xfbml=1"></script><fb:like href="" send="false" width="450" show_faces="true" font=""></fb:like>\
         </div>\
         <div class="recipe-content">\
             '+this.recipe.getProperty("content").getValue()+'\

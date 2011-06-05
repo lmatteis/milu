@@ -239,18 +239,30 @@ apejs.urls = {
                 }
 
                 // now iterate over it again but only for form fields
+                var currPassword = "", newPassword = "";
                 for(i=0; i<data.length; i++) {
                     if(!data[i].file) {
                         if(data[i].fieldName == "bio")
                             user.setProperty("bio", data[i].fieldValue);
                         if(data[i].fieldName == "city")
                             user.setProperty("city", data[i].fieldValue);
+
+                        if(data[i].fieldName == "curr_password")
+                            currPassword = data[i].fieldValue;
+
+                        if(data[i].fieldName == "new_password")
+                            newPassword = data[i].fieldValue;
                     }
                 }
-                if(imageKey)
-                    user.setProperty("imageKey", imageKey);
+                if(currPassword != "" && newPassword != "") {
+                    // check that currPassword is the actual password (sha1d)
+                    if(user.getProperty("password") == usermodel.sha1(currPassword)) {
+                        user.setProperty("password", usermodel.sha1(newPassword));
+                    } else {
+                        error = "Password errata!";
+                    }
 
-                googlestore.put(user);
+                }
             } catch(e) {
                 error = "L'immagine è troppo grande, prova a ridimensionarla!";
             }
@@ -259,8 +271,13 @@ apejs.urls = {
                 var o = {error: error};
                 require("./skins/edit-user.js", o);
                 response.getWriter().println(o.out);
-            } else 
-                response.sendRedirect("/edit");
+            } else  {
+                if(imageKey)
+                    user.setProperty("imageKey", imageKey);
+
+                googlestore.put(user);
+                response.sendRedirect("/users/"+user.getKey().getId());
+            }
         }
     },
     "/serve/([a-zA-Z0-9_]+).png" : {

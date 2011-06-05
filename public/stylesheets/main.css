@@ -74,10 +74,20 @@ a:hover { text-decoration: underline; }
 		color: #999;
 	}
 
+    #header #nav_search {
+        float: right;
+		margin-top: 25px;
+        width: 420px;
+        text-align: right;
+    }
 	#header ul {
-		margin-top: 40px;
-		float: right;
 	}
+    .search input {
+		border-radius: 99px;
+        -moz-border-radius: 99px; /* Firefox */
+        -webkit-border-radius: 99px; /* Safari, Chrome */
+        margin-top: 15px;
+    }
 	
 	#footer ul {
 	    margin-top: 20px;
@@ -92,7 +102,7 @@ a:hover { text-decoration: underline; }
 		font-weight: normal;
 		font-size: 20px;
 		margin-left: 20px;
-		float: left;
+		float: right;
 	}
 	
 	#header ul li a, #footer ul li a {

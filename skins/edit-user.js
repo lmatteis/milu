@@ -27,6 +27,15 @@ else
 					<label for="bio">Su di me:</label>\
                     <textarea id="bio" name="bio">'+(u.getProperty("bio") || "")+'</textarea>\
 				</p>\
+                <h2 class="cabin">Cambia Password:</h2>\
+				<p>\
+					<label for="curr_password">Password corrente:</label>\
+                    <input id="curr_password" type="password" name="curr_password">\
+				</p>\
+				<p>\
+					<label for="new_password">Password nuova:</label>\
+                    <input id="new_password" type="password" name="new_password">\
+				</p>\
 				\
 				<p class="last-p"><button type="submit">Modifica!</button></p>\
 			</form>\

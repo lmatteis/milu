@@ -38,24 +38,27 @@ this.out += 'Il Grillo Mangiante</title> \
 	\
 	<div id="header-wrapper">	\
 	<div id="header"> \
-		<ul> \
-			<li>';
-    this.out += '<a href="/">Home</a><span class="light">&bull;</span><a href="/users">Utenti</a>\
-                <span class="light">&bull;</span>';
-var u;
-if(u = _request.getAttribute("user")) {
-    this.out += '<a href="/users/'+u.getKey().getId()+'">Profilo</a>\
-                <span class="light">&bull;</span> \
- <a href="/logout?returnurl='+_request.getRequestURI()+'">Logout</a> \
-';
-} else {
-    this.out +='<a href="/register?returnurl='+_request.getRequestURI()+'">Registrati</a> \
-                <span class="light">&bull;</span> \
- <a href="/login?returnurl='+_request.getRequestURI()+'">Login</a> \
-';
-}
-            this.out +='</li>			\
-		</ul> \
+        <div id="nav_search">\
+            <ul> \
+                <li>';
+        this.out += '<a href="/">Home</a><span class="light">&bull;</span><a href="/users">Utenti</a>\
+                    <span class="light">&bull;</span>';
+    var u;
+    if(u = _request.getAttribute("user")) {
+        this.out += '<a href="/users/'+u.getKey().getId()+'">Profilo</a>\
+                    <span class="light">&bull;</span> \
+     <a href="/logout?returnurl='+_request.getRequestURI()+'">Logout</a> \
+    ';
+    } else {
+        this.out +='<a href="/register?returnurl='+_request.getRequestURI()+'">Registrati</a> \
+                    <span class="light">&bull;</span> \
+     <a href="/login?returnurl='+_request.getRequestURI()+'">Login</a> \
+    ';
+    }
+                this.out +='</li>			\
+            </ul> \
+            <div class="search"><input type="text" placeholder="Cerca..." /></div>\
+        </div><!--/nav_search-->\
 		<a href="/" id="logo"><h1>Il Grillo Mangiante</h1></a> \
 		<h2 class="cabin">Crea e condividi le tue ricette</h2> \
 	</div>	\

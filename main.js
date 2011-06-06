@@ -567,6 +567,13 @@ apejs.urls = {
             if(filename == "" || filevalue == "")
                 error = "Non hai caricato nessuna immagine";
 
+            // resize image to max 400 width
+            try {
+                filevalue = imageresizer.resizeWithoutCrop(filevalue, 400, 500);
+            } catch(e) {
+                error = "Problema col ridimensionamento, riprova!";
+            }
+
             var id = ""; // image id
             if(error == "") {
                 try {

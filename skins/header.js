@@ -10,6 +10,8 @@ this.out = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 // set the title of the recipe as title of html page
 if(this.recipe) {
     this.out += this.recipe.getProperty("title") + " | ";
+} else {
+    this.out += "Crea e condividi le tue ricette | ";
 }
 
 this.out += 'Il Grillo Mangiante</title> \

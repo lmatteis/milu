@@ -55,7 +55,7 @@ this.out+='\
         <div class="recipe-license">\
         <div id="fb-root"></div><script src="http://connect.facebook.net/it_IT/all.js#xfbml=1"></script><fb:like href="" send="false" width="450" show_faces="true" font=""></fb:like>\
         </div>\
-        <div class="recipe-content">\
+        <div class="recipe-content default_text">\
             '+this.recipe.getProperty("content").getValue()+'\
         </div>\
         <div class="recipe-tags">\

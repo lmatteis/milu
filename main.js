@@ -478,6 +478,7 @@ apejs.urls = {
 
             // get comments for this recipe
             var comments = googlestore.query("comment")
+                    .sort("created", "ASC")
                     .filter("recipeKey", "=", recipe.getKey())
                     .fetch();
 

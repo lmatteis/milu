@@ -478,8 +478,8 @@ apejs.urls = {
 
             // get comments for this recipe
             var comments = googlestore.query("comment")
-                    .sort("created", "ASC")
                     .filter("recipeKey", "=", recipe.getKey())
+                    .sort("created", "ASC")
                     .fetch();
 
             var o = {
@@ -639,6 +639,99 @@ apejs.urls = {
                 require("./skins/index.js", o);
                 response.getWriter().println(o.out);
                 */
+        }
+    },
+    "/forgot-password": {
+        get: function(request, response) {
+            var o = {};
+
+            require("./skins/forgot-password.js", o);
+            response.getWriter().println(o.out);
+         
+        },
+        post: function(request, response) {
+            var email = request.getParameter("email");
+            function err(s) {
+                var o = { email: email, error: s };
+                require("./skins/forgot-password.js", o);
+                response.getWriter().println(o.out);
+            }
+            if(!email || email == "")
+                return err("Devi inserire la tua email");
+
+            // check to see weather a user exists with this email
+            var user = googlestore.query("user")
+                        .filter("email", "=", email)
+                        .fetch(1);
+
+            if(!user.length)
+                return err("Quest'email non esiste nel nostro sistema");
+
+            // send email with a link that will reset the password
+            // so you can access /reset-password?username=xxx&password=xxx
+            require("./sendemail.js");
+
+            user = user[0];
+            try {
+                sendemail.send(user.getProperty("email"), user.getProperty("username"), "Il Grillo Mangiante password reset", "Per resettare la tua password clicca qui: "+MILU_URL+"/reset-password?username="+user.getProperty("username")+"&password="+user.getProperty("password"));
+            } catch(e) {
+                return err(e.getMessage());
+            }
+
+            err("Controlla la tua email!");
+
+        }
+    },
+    "/reset-password": {
+        get: function(request, response) {
+            // /reset-password?username=xxx&password=xxx
+            var username = request.getParameter("username"),
+                password = request.getParameter("password");
+
+            if(!username || username == "" || !password || password == "")
+                return response.sendRedirect("/");
+
+            // find user entity with this username and password
+            var user = googlestore.query("user")
+                        .filter("username", "=", username)
+                        .filter("password", "=", password)
+                        .fetch(1);
+
+            if(!user.length)
+                return response.sendRedirect("/");
+
+            // user exists show form
+            var o = { user: user[0] };
+            require("./skins/reset-password.js", o);
+            response.getWriter().println(o.out);
+        },
+        post: function(request, response) {
+            var username = request.getParameter("username"),
+                curr_password = request.getParameter("curr_password"),
+                new_password = request.getParameter("new_password");
+
+            if(!username || username == "" || !curr_password || curr_password == "" || !new_password || new_password == "")
+                return response.sendRedirect("/");
+
+            // find user entity with this username and curr_password
+            var user = googlestore.query("user")
+                        .filter("username", "=", username)
+                        .filter("password", "=", curr_password)
+                        .fetch(1);
+
+            if(!user.length)
+                return response.sendRedirect("/");
+
+            // user exists, change the password to what the new_password is
+            user = user[0];
+            user.setProperty("password", usermodel.sha1(new_password));
+            googlestore.put(user);
+
+            // then log in
+            var userKey = user.getKey();
+            var session = request.getSession(true);
+            session.setAttribute("userKey", userKey);
+            response.sendRedirect("/");
         }
     }
 };

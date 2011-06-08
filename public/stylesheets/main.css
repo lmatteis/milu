@@ -1080,4 +1080,12 @@ overflow: hidden;
 white-space: nowrap;
 }
 
+#forgot-password {
+text-align: center;
+clear: both;
+margin: 30px 0 0;
+}
+#forgot-password a {
+color: #333;
+}
 

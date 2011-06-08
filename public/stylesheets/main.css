@@ -4,6 +4,12 @@ body {
 	font-size: 16px;
 	background: #fff;
 }
+.default_text * {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	/*color: #333 !important;*/
+	font-size: 16px !important;
+	background: #fff !important;
+}
 
 .cabin {
 	font-family: "Cabin", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -49,14 +55,19 @@ a:hover { text-decoration: underline; }
 }
 
 	#header h1 {
-		font-family: "Gotham Rounded", "Helvetica Rounded", "Arial Rounded", "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-family: "Pacifico","Lobster","Gotham Rounded", "Helvetica Rounded", "Arial Rounded", "Helvetica Neue", Helvetica, Arial, sans-serif;
 		float: left;
 		font-size: 3em;
 		color: #6A4A3C;
 		display: block;
 		margin: 25px auto 5px;
 		border-bottom: 1px dashed white;
+        text-shadow: 2px 2px 1px #999;
 	}
+    h2.cabin {
+        margin-top: 20px;
+
+    }
 	
 	#logo:hover { text-decoration: none; }
 	#logo:hover h1 { color: #333; }
@@ -69,10 +80,23 @@ a:hover { text-decoration: underline; }
 		color: #999;
 	}
 
+    #header #nav_search {
+        float: right;
+		margin-top: 25px;
+        width: 500px;
+        text-align: right;
+    }
 	#header ul {
-		margin-top: 40px;
-		float: right;
 	}
+    .search input {
+		border-radius: 99px;
+        -moz-border-radius: 99px; /* Firefox */
+        -webkit-border-radius: 99px; /* Safari, Chrome */
+        margin-top: 15px;
+    }
+    iframe {
+        width: 100%;
+    }
 	
 	#footer ul {
 	    margin-top: 20px;
@@ -87,7 +111,7 @@ a:hover { text-decoration: underline; }
 		font-weight: normal;
 		font-size: 20px;
 		margin-left: 20px;
-		float: left;
+		float: right;
 	}
 	
 	#header ul li a, #footer ul li a {
@@ -846,6 +870,7 @@ font-weight: normal;
 }
 .recipe .recipe-edit {
     float: right;
+    text-align: right;
 }
 .recipe .recipe-author,
 .recipe .recipe-author a {
@@ -1033,4 +1058,34 @@ margin: 0 0 1em 0;
     height: 364px !important;
 }
 
+
+.user-info {
+height: 85px;
+width: 230px;
+margin: 8px 5px;
+overflow: hidden;
+float: left;
+}
+
+.user-info .user-gravatar48 {
+float: left;
+width: 48px;
+height: 48px;
+}
+.user-info .user-details {
+float: left;
+margin-left: 5px;
+width: 145px;
+overflow: hidden;
+white-space: nowrap;
+}
+
+#forgot-password {
+text-align: center;
+clear: both;
+margin: 30px 0 0;
+}
+#forgot-password a {
+color: #333;
+}
 

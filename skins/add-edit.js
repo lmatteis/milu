@@ -1,7 +1,7 @@
 require("./skins/header.js", this);
 this.out += '<link rel="stylesheet" href="/stylesheets/MooEditable.css"> \
 <script> \
-     jQuery.noConflict();\
+    jQuery.noConflict();\
 window.addEvent("domready", function(){\
     var options = {\
         extraCSS: "img{ max-width: 220px;}"\

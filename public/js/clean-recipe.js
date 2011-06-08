@@ -19,6 +19,14 @@ $(function(){
         $this.replaceWith(a);
     });
 
+    // confirm before deleting recipe
+    $("#delete_recipe").click(function(e) {
+        
+        if(!confirm("Vuoi veramente cancellare questa ricetta?")) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
 
 
 });

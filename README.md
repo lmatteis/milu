@@ -1,7 +1,7 @@
 #An Italian cooking site
 
 This project is simply the codebase for versioning my work done for
-[milu](http://milu-app.appspot.com).
+[Il Grillo Mangiante](http://www.ilgrillomangiante.com).
 
 It's completely written in JavaScript (even server-side code) and uses
  the [ApeJS](https://github.com/lmatteis/apejs/) framework, therefore it will

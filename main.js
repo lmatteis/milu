@@ -65,17 +65,17 @@ apejs.urls = {
 
 
             if(usermodel.emailExists(user.email))
-                error = "Quest'email esiste!";
+                error = "Questo indirizzo di posta elettronica è già associato ad un altro account!";
 
             // check email format
             if(!usermodel.validateEmail(user.email))
-                error = "Formato dell'email sbagliato";
+                error = "Il formato dell'indirizzo di posta elettronica non è corretto!";
 
             if(usermodel.usernameExists(user.username))
-                error = "Questo username esiste gia', scegline un altro";
+                error = "Questo username esiste già, scegline un altro!";
                 
             if(!usermodel.validUsername(user.username))
-                error = "Assicurati che lo username non contenga nessuno spazio o carattere strano e che sia maggiore di 4 e minore di 21 caratteri";
+                error = "Assicurati che lo username non contenga nessuno spazio o carattere non ammesso e che sia maggiore di 3 e minore di 21 caratteri!";
 
             if(error) {
                 var o = { 
@@ -92,7 +92,7 @@ apejs.urls = {
                 var userKey = googlestore.put(entity);
 
                 // dont login, send email
-                var o = {error: "Ti e' stata mandata un'email con il link per l'attivazione del tuo account."};
+                var o = {error: "Ti è stata inviata una email con il link per l'attivazione del tuo account!"};
                 require("./sendemail.js");
                 try {
                     sendemail.send(user.email, user.username, "Completa la registrazione", "Per completare la registrazione clicca qui: "+MILU_URL+"/activate?keyString="+KeyFactory.keyToString(userKey)+"");
@@ -128,7 +128,7 @@ apejs.urls = {
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else if(!res[0].getProperty("active")) {
-                var o = {error: "Quest account non e' ancora attivo. Controlla la tua email"};
+                var o = {error: "Questo account non è ancora attivo. Controlla la tua casella di posta elettronica!"};
                 require("./skins/login.js", o);
                 response.getWriter().println(o.out);
             } else {
@@ -150,12 +150,28 @@ apejs.urls = {
             response.sendRedirect(returnUrl);
         }
     },
+    "/users" : {
+        get: function(request, response) {
+            var print = printer(response);
+
+            var users = googlestore.query("user")
+                            .sort("created", "DESC")
+                            .fetch();
+
+            var o = { 
+                users: users
+            };
+            require("./skins/users.js", o);
+            print(o.out);
+
+        }
+    },
     "/users/([a-zA-Z0-9_]+)" : {
 
         get: function(request, response, matches) {
             var userId = matches[1],
                 // create key from the user id
-                userKey = googlestore.createKey("user", parseInt(userId)),
+                userKey = googlestore.createKey("user", parseInt(userId, 10)),
                 thisUser = googlestore.get(userKey),
                 // get this users recipes
                 recipes = googlestore.query("recipe")
@@ -184,7 +200,7 @@ apejs.urls = {
         post: function(request, response) {
             var user = request.getAttribute("user");
             if(!user) {
-                response.getWriter().println("Devi fare il login per accedere a questa pagina");
+                response.getWriter().println("Esegui il login per accedere a questa pagina!");
                 return;
             }
 
@@ -198,7 +214,7 @@ apejs.urls = {
                 // upload the image first so we get imageKey
                 for(var i=0; i<data.length; i++) {
                     if(data[i].file && data[i].fieldName != "") { 
-                        var resized = imageresizer.resize(data[i].fieldValue, 128, 128),
+                        var resized = imageresizer.resizeWithoutCrop(data[i].fieldValue, 128, 128),
                             o = {
                                 name: data[i].fieldName,
                                 image: resized // this is the actual blob
@@ -223,25 +239,45 @@ apejs.urls = {
                 }
 
                 // now iterate over it again but only for form fields
+                var currPassword = "", newPassword = "";
                 for(i=0; i<data.length; i++) {
-                    if(!data[i].file && data[i].fieldName == "name") {
-                        user.setProperty("name", data[i].fieldValue);
-                        if(imageKey)
-                            user.setProperty("imageKey", imageKey);
+                    if(!data[i].file) {
+                        if(data[i].fieldName == "bio")
+                            user.setProperty("bio", data[i].fieldValue);
+                        if(data[i].fieldName == "city")
+                            user.setProperty("city", data[i].fieldValue);
+
+                        if(data[i].fieldName == "curr_password")
+                            currPassword = data[i].fieldValue;
+
+                        if(data[i].fieldName == "new_password")
+                            newPassword = data[i].fieldValue;
                     }
                 }
+                if(currPassword != "" && newPassword != "") {
+                    // check that currPassword is the actual password (sha1d)
+                    if(user.getProperty("password") == usermodel.sha1(currPassword)) {
+                        user.setProperty("password", usermodel.sha1(newPassword));
+                    } else {
+                        error = "Password errata!";
+                    }
 
-                googlestore.put(user);
+                }
             } catch(e) {
-                error = "L'immagine e' troppo grande. Prova a ridimensionarla";
+                error = "L'immagine è troppo grande, prova a ridimensionarla!";
             }
 
             if(error != "") {
                 var o = {error: error};
                 require("./skins/edit-user.js", o);
                 response.getWriter().println(o.out);
-            } else 
-                response.sendRedirect("/edit");
+            } else  {
+                if(imageKey)
+                    user.setProperty("imageKey", imageKey);
+
+                googlestore.put(user);
+                response.sendRedirect("/users/"+user.getKey().getId());
+            }
         }
     },
     "/serve/([a-zA-Z0-9_]+).png" : {
@@ -251,7 +287,7 @@ apejs.urls = {
 
             var imageId = matches[1],
                 // create key from the user id
-                imageKey = googlestore.createKey("image", parseInt(imageId)),
+                imageKey = googlestore.createKey("image", parseInt(imageId, 10)),
                 image = googlestore.get(imageKey);
 
             var imageBlob = image.getProperty("image"),
@@ -297,7 +333,7 @@ apejs.urls = {
                     fieldValue = data[i].fieldValue;
                 if(recipe[fieldName] === "") {
                     if(fieldValue == "") {
-                        error = "Devi completare tutto";
+                        error = "Devi completare tutto!";
                     }
                     if(fieldName == "content" || fieldName == "ingredients")
                         fieldValue = new Text(fieldValue);
@@ -335,14 +371,14 @@ apejs.urls = {
                             break;
                         }
                 } catch(e) {
-                    error = "Immagine troppo grande";
+                    error = "L'immagine è troppo grande, prova a ridimensionarla!";
                 }
             }
 
             // when editing an image can be empty
             if(!recipeId && error == "") {
                 if(!fullImageKey || !thumbKey)
-                    error = "Devi inserire un'immagine";
+                    error = "Inserisci un'immagine!";
             }
 
             if(error == "") {
@@ -360,7 +396,7 @@ apejs.urls = {
                 }
 
                 if(recipeId) { // edit
-                    var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+                    var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
                         entity = googlestore.get(recipeKey);
                     googlestore.set(entity, recipe);
                 } else { // add it
@@ -393,7 +429,7 @@ apejs.urls = {
             }
             var recipeId = matches[1];
 
-            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
                 recipe = googlestore.get(recipeKey);
 
             // recipe.getProperty('tags') is an instance of java.util.Collection.
@@ -407,10 +443,34 @@ apejs.urls = {
         }
 
     },
+    "/delete-recipe/([a-zA-Z0-9_]+)" : {
+        get: function(request, response, matches) {
+            var user = request.getAttribute("user");
+            if(!user) { // not logged-in
+                response.sendRedirect("/error");
+                return;
+            }
+            var recipeId = matches[1];
+
+            var recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
+                recipe = googlestore.get(recipeKey);
+
+            // check that this recipe belongs to this user
+            if(!recipe.getProperty("userKey").equals(user.getKey())) {
+                response.sendRedirect("/error");
+                return;
+            }
+
+            googlestore.del(recipeKey);
+                
+            response.sendRedirect("/");
+        }
+
+    },
     "/recipes/([a-zA-Z0-9_]+)" : {
         get: function(request, response, matches) {
             var recipeId = matches[1],
-                recipeKey = googlestore.createKey("recipe", parseInt(recipeId)),
+                recipeKey = googlestore.createKey("recipe", parseInt(recipeId, 10)),
                 recipe = googlestore.get(recipeKey);
 
             var tags = recipe.getProperty("tags").toArray();
@@ -419,6 +479,7 @@ apejs.urls = {
             // get comments for this recipe
             var comments = googlestore.query("comment")
                     .filter("recipeKey", "=", recipe.getKey())
+                    .sort("created", "ASC")
                     .fetch();
 
             var o = {
@@ -507,6 +568,13 @@ apejs.urls = {
             if(filename == "" || filevalue == "")
                 error = "Non hai caricato nessuna immagine";
 
+            // resize image to max 400 width
+            try {
+                filevalue = imageresizer.resizeWithoutCrop(filevalue, 400, 500);
+            } catch(e) {
+                error = "Problema col ridimensionamento, riprova!";
+            }
+
             var id = ""; // image id
             if(error == "") {
                 try {
@@ -517,7 +585,7 @@ apejs.urls = {
                     var key = googlestore.put(entity);
                     id = key.getId();
                 } catch(e) {
-                    error = "Immagine troppo grande";
+                    error = "L'immagine è troppo grande, prova a ridimensionarla!";
                 }
             }
             
@@ -538,7 +606,7 @@ apejs.urls = {
                     user.setProperty("active", true);
                     googlestore.put(user);
 
-                    var o = {error: "Grazie per aver attivato il tuo account. Ora puoi procedere con il login."};
+                    var o = {error: "Grazie per aver attivato il tuo account. Ora puoi procedere con il login!"};
                     require("./skins/login.js", o);
                     response.getWriter().println(o.out);
                 }
@@ -550,18 +618,126 @@ apejs.urls = {
     "/search": {
         get: function(request, response) {
             var q = request.getParameter("q");
-            // get all recipes
-            var recipes = googlestore.query("recipe")
-                        //.sort("created", "DESC")
-                        .filter("tags", "=", q)
-                        .fetch();
+            var o = { };
+            require("./skins/header.js", o);
+                
+            o.out += render("./skins/googlesearch.html");
 
-            // pass all this data to the skin
-            var o = { 
-                recipes: recipes
-            };
-            require("./skins/index.js", o);
+            require("./skins/footer.js", o);
             response.getWriter().println(o.out);
+                // get all recipes
+                /*
+                var recipes = googlestore.query("recipe")
+                            .sort("created", "DESC")
+                            .filter("tags", "=", q)
+                            .fetch();
+
+                // pass all this data to the skin
+                var o = { 
+                    recipes: recipes
+                };
+                require("./skins/index.js", o);
+                response.getWriter().println(o.out);
+                */
+        }
+    },
+    "/forgot-password": {
+        get: function(request, response) {
+            var o = {};
+
+            require("./skins/forgot-password.js", o);
+            response.getWriter().println(o.out);
+         
+        },
+        post: function(request, response) {
+            var email = request.getParameter("email");
+            function err(s) {
+                var o = { email: email, error: s };
+                require("./skins/forgot-password.js", o);
+                response.getWriter().println(o.out);
+            }
+            if(!email || email == "")
+                return err("Devi inserire la tua email");
+
+            // check to see weather a user exists with this email
+            var user = googlestore.query("user")
+                        .filter("email", "=", email)
+                        .fetch(1);
+
+            if(!user.length)
+                return err("Quest'email non esiste nel nostro sistema");
+
+            // send email with a link that will reset the password
+            // so you can access /reset-password?username=xxx&password=xxx
+            require("./sendemail.js");
+
+            user = user[0];
+            try {
+                sendemail.send(user.getProperty("email"), user.getProperty("username"), "Il Grillo Mangiante password reset", "Per resettare la tua password clicca qui: "+MILU_URL+"/reset-password?username="+user.getProperty("username")+"&password="+user.getProperty("password"));
+            } catch(e) {
+                return err(e.getMessage());
+            }
+
+            err("Controlla la tua email!");
+
+        }
+    },
+    "/reset-password": {
+        get: function(request, response) {
+            // /reset-password?username=xxx&password=xxx
+            var username = request.getParameter("username"),
+                password = request.getParameter("password");
+
+            if(!username || username == "" || !password || password == "")
+                return response.sendRedirect("/");
+
+            // find user entity with this username and password
+            var user = googlestore.query("user")
+                        .filter("username", "=", username)
+                        .filter("password", "=", password)
+                        .fetch(1);
+
+            if(!user.length)
+                return response.sendRedirect("/");
+
+            // user exists show form
+            var o = { user: user[0] };
+            require("./skins/reset-password.js", o);
+            response.getWriter().println(o.out);
+        },
+        post: function(request, response) {
+            var username = request.getParameter("username"),
+                curr_password = request.getParameter("curr_password"),
+                new_password = request.getParameter("new_password");
+
+            if(!username || username == "" || !curr_password || curr_password == "" || !new_password || new_password == "")
+                return response.sendRedirect("/");
+
+            // find user entity with this username and curr_password
+            var user = googlestore.query("user")
+                        .filter("username", "=", username)
+                        .filter("password", "=", curr_password)
+                        .fetch(1);
+
+            if(!user.length)
+                return response.sendRedirect("/");
+
+            // user exists, change the password to what the new_password is
+            user = user[0];
+            user.setProperty("password", usermodel.sha1(new_password));
+            googlestore.put(user);
+
+            // then log in
+            var userKey = user.getKey();
+            var session = request.getSession(true);
+            session.setAttribute("userKey", userKey);
+            response.sendRedirect("/");
         }
     }
 };
+
+// simple syntax sugar
+function printer(response) {
+    var writer = response.getWriter();
+    return writer.print.bind(writer);
+}

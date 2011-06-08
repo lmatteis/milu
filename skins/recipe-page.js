@@ -52,10 +52,10 @@ this.out+='\
         <div class="recipe-pic">\
             <a target="_blank" href="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png"><img style="width:451px;" id="recipe_pic" src="/serve/'+this.recipe.getProperty("fullImageKey").getId()+'.png" /></a>\
         </div>\
-        <!--<div class="recipe-license">\
-            <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="external">Creative Commons Attribution-Share Alike 3.0 License</a></p> \
-        </div>-->\
-        <div class="recipe-content">\
+        <div class="recipe-license">\
+        <div id="fb-root"></div><script src="http://connect.facebook.net/it_IT/all.js#xfbml=1"></script><fb:like href="" send="false" width="450" show_faces="true" font=""></fb:like>\
+        </div>\
+        <div class="recipe-content default_text">\
             '+this.recipe.getProperty("content").getValue()+'\
         </div>\
         <div class="recipe-tags">\
@@ -75,7 +75,7 @@ this.out+='\
     <div class="recipe-right">';
         var user = _request.getAttribute("user");
         if(user && this.recipe.getProperty("userKey").equals(user.getKey())) {
-            this.out += '<div class="recipe-edit"><a href="/edit-recipe/'+recipe.getKey().getId()+'">Modifica</a></div>';
+            this.out += '<div class="recipe-edit"><a href="/edit-recipe/'+recipe.getKey().getId()+'">Modifica</a><br><a id="delete_recipe" href="/delete-recipe/'+recipe.getKey().getId()+'">Elimina</a></div>';
         }
         this.out += '<h1>'+this.recipe.getProperty("title")+'</h1>\
         <span class="recipe-author">by <a href="/users/'+recipeAuthor.getKey().getId()+'">'+recipeAuthor.getProperty("username")+'</a></span>\
@@ -112,12 +112,31 @@ this.out+='\
                         </a>';
                     }
 
+                var past = comment.getProperty("created");        
+                var now = new Date();
+                var ago = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
+                var unit = "giorni";
+                if(ago == 1)
+                    unit = "giorno"
+
+                if(ago == 0) {
+                    ago = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+                    unit = "ore";
+                }
+                if(ago == 0) {
+                    ago = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+                    unit = "minuti";
+                }
+                if(ago == 0) {
+                    ago = java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+                    unit = "secondi";
+                }
                 this.out +=' </div>\
                 <div class="comment-author">\
                     <a href="/users/'+author.getKey().getId()+'">'+author.getProperty("username")+'</a>\
                 </div>\
                 <div class="comment-date">\
-                    <a href="#">'+comment.getProperty("created")+'</a>';
+                    <a href="#">'+ago+' '+unit+' fa</a>';
 
                 // if logged in and this comment is of user logged in
                 if(user && author.getKey().equals(user.getKey())) {

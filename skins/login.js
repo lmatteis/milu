@@ -23,6 +23,7 @@ if(u = _request.getAttribute("user")) {
 				<p class="last-p"><button type="submit">Login!</button></p>\
 			</form>\
         </div><!-- /link-form -->\
+        <p id="forgot-password"><a href="/forgot-password">Hai dimenticato la password?</a></p>\
         ';
 
 }

@@ -36,7 +36,7 @@ this.out+='\
         <span class="recipe-author">by <a href="/users/'+recipeAuthor.getKey().getId()+'">'+recipeAuthor.getProperty("username")+'</a></span>\
         <div class="recipe-ingredients">\
             <h3>Ingredienti:</h3>\
-            <div class="ingredients-content">'+this.recipe.getProperty("ingredients").getValue()+'</div>\
+            <div class="ingredients-content default_text">'+this.recipe.getProperty("ingredients").getValue()+'</div>\
         </div>\
         <div class="recipe-comments">\
             <h2><a name="comments"></a>Commenti</h2>';

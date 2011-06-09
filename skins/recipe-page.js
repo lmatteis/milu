@@ -1,52 +1,7 @@
 require("./skins/header.js", this);
 
-/*
-this.out += '<script>\
-$(function(){\
-    \
-    var resizeImg = function(){\
-        var contWidth = $(".recipe-pic").width();\
-        var contHeight = $(".recipe-pic").height();\
-        var padWidth = contWidth*1.1;\
-        var padHeight = contHeight*1.1;\
-\
-        var $this = $(this);\
-\
-        // find out which part to resize (only 1)\
-        if($this.height() > $this.width()) { // resize only height\
-            if($this.height() > (padHeight)) {\
-                $this.css("height", padHeight);\
-            }\
-        } else {\
-            if($this.width() > (padWidth)) {\
-                $this.css("width", padWidth);\
-            }\
-        }\
-\
-        // now our image is proportionally resized\
-        // lets position it\
-\
-        // move left only if width is bigger than container\
-        if($this.width() > contWidth) {\
-            var left = ($this.width() - contWidth) / 2;\
-            $this.css("left", "-"+left+"px");\
-        }\
-\
-        // move top only if height is bigger than container\
-        if($this.height() > contHeight) {\
-            var top = ($this.height() - contHeight) / 2;\
-            $this.css("top", "-"+top+"px");\
-        }\
-        \
-    };\
-\
-    $("#recipe_pic").load(resizeImg);\
-    resizeImg.apply($("#recipe_pic").get(0));\
-});\
-</script>\
-*/
 this.out+='\
-<script type="text/javascript" src="/js/clean-recipe.js"></script>\
+<script type="text/javascript" src="/js/clean-recipe.js?'+this.VERSION+'"></script>\
 <div class="recipe">\
     <div class="recipe-left">\
         <div class="recipe-pic">\

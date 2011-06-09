@@ -3,8 +3,12 @@ $(function(){
     // remove all empty p's
     $(".recipe-content p, .ingredients-content p").each(function() {
         var $this = $(this);
-        if (/^\s+$/.test($this.text())) //string contains only whitespace
-            $this.remove();
+        // try and remove only if it doesn't contain an image
+        if(!$this.find("img").length) {
+            var text = $this.text();
+            if (/^\s+$/.test(text) || !text || text == "") //string contains only whitespace
+                $this.remove();
+        }
     });
 
     // wrap images in links

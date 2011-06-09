@@ -1,7 +1,11 @@
 require("./skins/header.js", this);
-this.out += '<link rel="stylesheet" href="/stylesheets/MooEditable.css"> \
-<script> \
+this.out += '<link rel="stylesheet" href="/stylesheets/MooEditable.css?'+this.VERSION+'"> \
+<script>\
     jQuery.noConflict();\
+</script>\
+<script src="/js/mootools-yui-compressed.js?'+this.VERSION+'"></script> \
+<script src="/js/MooEditable.js?'+this.VERSION+'"></script> \
+<script> \
 window.addEvent("domready", function(){\
     var options = {\
         extraCSS: "img{ max-width: 220px;}"\

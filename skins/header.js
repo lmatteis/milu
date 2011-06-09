@@ -1,3 +1,5 @@
+this.VERSION = "1"; // change this to refresh static content. I know what a fucking hack right?
+
 this.out = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> \
  \
@@ -16,15 +18,12 @@ if(this.recipe) {
 
 this.out += 'Il Grillo Mangiante</title> \
  \
-<!-- just so dev is faster<link href=\'http://fonts.googleapis.com/css?family=Cabin:regular,bold\' rel="stylesheet" type="text/css">--> \
-<link type="text/css" rel="stylesheet" href="/stylesheets/reset.css" /> \
-<link type="text/css" rel="stylesheet" href="/stylesheets/main.css" /> \
+<link type="text/css" rel="stylesheet" href="/stylesheets/reset.css?'+this.VERSION+'" /> \
+<link type="text/css" rel="stylesheet" href="/stylesheets/main.css?'+this.VERSION+'" /> \
 <link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">\
  \
-<script src="/js/mootools-yui-compressed.js"></script> \
-<script src="/js/MooEditable.js"></script> \
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script> \
-<script type="text/javascript" src="/js/ui.js"></script> \
+<script type="text/javascript" src="/js/ui.js?'+this.VERSION+'"></script> \
 <script type="text/javascript">\
 \
   var _gaq = _gaq || [];\

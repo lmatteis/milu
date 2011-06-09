@@ -1,4 +1,5 @@
 $(function(){
+    var $ = jQuery;
 
     // add ... to recipe name if it's too long
     var len = 23;

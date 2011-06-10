@@ -320,6 +320,7 @@ apejs.urls = {
                 title: "",
                 content: "",
                 ingredients: "",
+                category: "",
                 tags: ""
             }, error = "";
 
@@ -337,8 +338,9 @@ apejs.urls = {
                     }
                     if(fieldName == "content" || fieldName == "ingredients")
                         fieldValue = new Text(fieldValue);
-                    if(fieldName == "tags")
+                    if(fieldName == "tags") {
                         fieldValue = fieldValue.trim().split(" ");
+                    }
 
                     recipe[fieldName] = fieldValue;
                 }

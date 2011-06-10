@@ -31,12 +31,26 @@ window.addEvent("domready", function(){\
 
                     if(this.recipe && this.recipe.getProperty("thumbKey"))
                         this.out += '<img src="/serve/'+this.recipe.getProperty("thumbKey").getId()+'.png" />';
+            
+            var categories = ["Antipasti - Buffet - Sfizi", "Pane - Pizza - Torte rustiche", "Primi piatti", "Secondi piatti", "Contorni", "Frutta", "Dolci", "Cocktail - Bevande"];
                     
 				this.out += '</p>\
 				<p>\
 					<label for="title">Titolo:</label>\
                     <input id="title" type="text" name="title" value="'+(this.recipe ? this.recipe.getProperty("title"):"")+'" />\
 				</p>\
+				<p>\
+					<label for="categories">Categoria:</label>\
+                        <select name="category">';
+            for(var i=0; i<categories.length; i++) {
+                var selected = "";
+                if(this.recipe && categories[i] == this.recipe.getProperty("category"))
+                    selected = "selected";
+
+                this.out += '<option '+selected+' value="'+categories[i]+'">'+categories[i]+ '</option>';
+            }
+				this.out += '</select>\
+                </p>\
 				<p>\
 					<label for="content">Preparazione: </label>\
                     <textarea id="content" name="content">'+(this.recipe ? (this.recipe.getProperty("content")!="" ? this.recipe.getProperty("content").getValue():""):"")+'</textarea>\

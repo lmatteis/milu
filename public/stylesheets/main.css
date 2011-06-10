@@ -10,6 +10,9 @@ body {
 	font-size: 16px !important;
 	background: #fff !important;
 }
+.default_text a {
+    color: #0e7bba !important;
+}
 
 .cabin {
 	font-family: "Cabin", "Helvetica Neue", Helvetica, Arial, sans-serif;

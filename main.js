@@ -339,7 +339,9 @@ apejs.urls = {
                     if(fieldName == "content" || fieldName == "ingredients")
                         fieldValue = new Text(fieldValue);
                     if(fieldName == "tags") {
-                        fieldValue = fieldValue.trim().split(" ");
+                        // convert it to js string so we can use split below
+                        fieldValue = ""+fieldValue;
+                        fieldValue = fieldValue.trim().split(/\s*[ ,;]\s*/);
                     }
 
                     recipe[fieldName] = fieldValue;

@@ -32,7 +32,6 @@ window.addEvent("domready", function(){\
                     if(this.recipe && this.recipe.getProperty("thumbKey"))
                         this.out += '<img src="/serve/'+this.recipe.getProperty("thumbKey").getId()+'.png" />';
             
-            var categories = ["Antipasti - Buffet - Sfizi", "Pane - Pizza - Torte rustiche", "Primi piatti", "Secondi piatti", "Contorni", "Frutta", "Dolci", "Cocktail - Bevande"];
                     
 				this.out += '</p>\
 				<p>\

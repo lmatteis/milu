@@ -1,4 +1,5 @@
 this.VERSION = "2"; // change this to refresh static content. I know what a fucking hack right?
+var categories = ["Antipasti - Buffet - Sfizi", "Pane - Pizza - Torte rustiche", "Primi piatti", "Secondi piatti", "Contorni", "Frutta", "Dolci", "Cocktail - Bevande"];
 
 this.out = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> \

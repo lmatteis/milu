@@ -1,4 +1,21 @@
 require("./skins/header.js", this);
+this.out += '<div class="order_filter">\
+    <div id="tabs-answer-user" class="subtabs">\
+        <a href="#" class="'+(_request.getParameter("sort") ? "" : "youarehere")+'">Ultime ricette</a>\
+        <a href="#" class="'+(_request.getParameter("sort") ? "youarehere" : "")+'">Le più votate</a>\
+    </div>\
+    ';
+this.out += '<select name="category">\
+            <option>Categorie</option>';
+for(var i=0; i<categories.length; i++) {
+    var selected = "";
+    if(this.recipe && categories[i] == this.recipe.getProperty("category"))
+        selected = "selected";
+
+    this.out += '<option '+selected+' value="'+categories[i]+'">'+categories[i]+ '</option>';
+}
+this.out += '</select>\
+            </div><!-- /order_filter-->';
 
 this.out += '<ul class="recipe_list large">';
 var counter = 0;

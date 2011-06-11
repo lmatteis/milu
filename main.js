@@ -30,17 +30,32 @@ apejs.before = function(request, response) {
 apejs.urls = {
     "/": {
         get: function(request, response) {
-            // get all recipes
-            var recipes = googlestore.query("recipe")
-                            .sort("created", "DESC")
-                            .fetch();
+            var currPage = request.getParameter("page") || 1,
+                tot = 2,
+                offset = tot * (currPage-1);
 
-            // pass all this data to the skin
-            var o = { 
-                recipes: recipes
-            };
-            require("./skins/index.js", o);
-            response.getWriter().println(o.out);
+            var cat = request.getParameter("cat");
+
+            try {
+                // get all recipes
+                var recipes = googlestore.query("recipe")
+                                .sort("created", "DESC")
+                                .limit(tot)
+                                .offset(offset);
+
+                if(cat && cat != "")
+                    recipes.filter("category", "=", cat);
+
+
+                // pass all this data to the skin
+                var o = { 
+                    recipes: recipes.fetch()
+                };
+                require("./skins/index.js", o);
+                response.getWriter().println(o.out);
+            } catch (e) {
+                response.getWriter().println(e);
+            }
         }
     },
     "/register": {

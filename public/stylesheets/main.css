@@ -110,21 +110,26 @@ a:hover { text-decoration: underline; }
 	    float: right;
 	}
 	
-	#header ul li, #footer ul li {
+	#header ul li, #footer ul li, .nav ul li {
 		font-weight: normal;
 		font-size: 20px;
 		margin-left: 20px;
 		float: right;
 	}
+    .nav ul li {
+        float: left;
+        margin-left:0;
+        margin-right: 20px;
+    }
 	
-	#header ul li a, #footer ul li a {
+	#header ul li a, #footer ul li a, .nav ul li a {
 		display: inline-block;
 		padding: 10px 14px 13px;
 		margin-left: 2px;
 		border-top: 1px #fff solid;
 	}
 	
-	#header ul li a:hover, #footer ul li a:hover
+	#header ul li a:hover, #footer ul li a:hover, .nav ul li a:hover
 	{
 		border-top: 1px #eee solid;
 		border-radius: 99px;
@@ -137,8 +142,8 @@ a:hover { text-decoration: underline; }
 	background: #fff;
 }
 			
-#main {
-	padding: 30px 0 30px;
+#main { 
+    padding: 10px 0 30px 0;
 	clear: both;
 	width: 60%;
 	min-width: 800px;
@@ -1094,3 +1099,36 @@ margin: 30px 0 0;
 color: #333;
 }
 
+.order_filter {
+    height: 40px;
+    margin-bottom: 10px;
+}
+.order_filter select {
+    float: right;
+
+    border-radius: 99px;
+    -moz-border-radius: 99px; /* Firefox */
+    -webkit-border-radius: 99px; /* Safari, Chrome */
+    border-color: #ddd;
+}
+.subtabs {
+float: left;
+font-weight: bold;
+margin-top: 10px;
+}
+.subtabs a {
+border: 1px solid #CCC;
+color: #808185;
+display: block;
+float: left;
+font-size: 80%;
+margin-right: 3px;
+padding: 2px 4px 4px;
+text-decoration: none;
+}
+.subtabs a.youarehere {
+background-color: #808185;
+border: 1px solid #808185;
+color: white;
+font-weight: bold;
+}

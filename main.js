@@ -737,6 +737,46 @@ apejs.urls = {
             session.setAttribute("userKey", userKey);
             response.sendRedirect("/");
         }
+    },
+    // this runs in cron job
+    "/likes": {
+        get: function(request, response) {
+            print = printer(response);
+            require("./httpget.js");        
+
+            response.setHeader("content-type", "text/plain");
+
+            // get all recipes
+            var recipes = googlestore.query("recipe")
+                            .fetch();
+
+            recipes.forEach(function(recipe) {
+                // for each recipe, based on the ID, go fetch the likes from facebook
+                var id = recipe.getKey().getId();
+
+                try {    
+                    // httpget doesn't like spaces, needs pluses
+                    var r = httpget("https://api.facebook.com/method/fql.query?query=select+total_count+from+link_stat+where+url='"+MILU_URL+"/recipes/"+id+"'&format=json"),
+                    parsed = JSON.parse(r);
+
+                    var likes = parsed[0].total_count;
+
+                    // save the number of likes in the db
+                    if(likes > 0) {
+                        var e = googlestore.entity("likes", ""+id);
+                        googlestore.set(e, {
+                            "likes": likes
+                        });
+
+                        // add it or edit it if key already exists
+                        googlestore.put(e);
+                        print("Saved "+likes+" likes for recipe with id: "+id+"\n");
+                    }
+                } catch(e) { 
+                    print(e); 
+                }
+            });
+        }
     }
 };
 

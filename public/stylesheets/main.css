@@ -143,8 +143,7 @@ a:hover { text-decoration: underline; }
 }
 			
 #main { 
-    padding: 10px 0 30px 0;
-	clear: both;
+    padding: 30px 0 30px 0;
 	width: 60%;
 	min-width: 800px;
 	max-width: 960px;
@@ -1099,9 +1098,10 @@ margin: 30px 0 0;
 color: #333;
 }
 
-.order_filter {
+.order_filter { 
     height: 40px;
     margin-bottom: 10px;
+    margin-top: -21px;
 }
 .order_filter select {
     float: right;
@@ -1114,7 +1114,7 @@ color: #333;
 .subtabs {
 float: left;
 font-weight: bold;
-margin-top: 10px;
+margin-top: 6px;
 }
 .subtabs a {
 border: 1px solid #CCC;
@@ -1123,8 +1123,11 @@ display: block;
 float: left;
 font-size: 80%;
 margin-right: 3px;
-padding: 2px 4px 4px;
+padding: 7px 10px;
 text-decoration: none;
+    border-radius: 99px;
+    -moz-border-radius: 99px; /* Firefox */
+    -webkit-border-radius: 99px; /* Safari, Chrome */
 }
 .subtabs a.youarehere {
 background-color: #808185;

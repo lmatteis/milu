@@ -31,25 +31,48 @@ apejs.urls = {
     "/": {
         get: function(request, response) {
             var currPage = request.getParameter("page") || 1,
-                tot = 2,
+                tot = 16,
                 offset = tot * (currPage-1);
 
-            var cat = request.getParameter("cat");
+            var cat = request.getParameter("cat"),
+                likes = request.getParameter("likes");
 
             try {
-                // get all recipes
-                var recipes = googlestore.query("recipe")
-                                .sort("created", "DESC")
+                if(likes == "true") { 
+                    // query the likes entity
+                    var l = googlestore.query("likes")
+                                .sort("likes", "DESC")
                                 .limit(tot)
-                                .offset(offset);
+                                .offset(offset)
+                                .fetch();
 
-                if(cat && cat != "")
-                    recipes.filter("category", "=", cat);
+                    var recipes = [];
+                    l.forEach(function(like) {
+                        // get the recipe with this id
+                        try {
+                            var id = like.getProperty("recipeId"),
+                                key = googlestore.createKey("recipe", parseInt(id, 10)),
+                                rec = googlestore.get(key);
+                            // append it to the recipe array
+                            recipes.push(rec);
+                        } catch(e){}
+                    });
+                } else {
+                    // get all recipes
+                    var recipes = googlestore.query("recipe")
+                                    .sort("created", "DESC")
+                                    .limit(tot)
+                                    .offset(offset);
 
+                    if(cat && cat != "")
+                        recipes.filter("category", "=", cat);
+
+                    recipes = recipes.fetch();
+                }
 
                 // pass all this data to the skin
                 var o = { 
-                    recipes: recipes.fetch()
+                    recipes: recipes
                 };
                 require("./skins/index.js", o);
                 response.getWriter().println(o.out);
@@ -778,8 +801,8 @@ apejs.urls = {
 
                     // save the number of likes in the db
                     if(likes > 0) {
-                        var e = googlestore.entity("likes", ""+id);
-                        googlestore.set(e, {
+                        var e = googlestore.entity("likes", ""+id, {
+                            "recipeId": ""+id,
                             "likes": likes
                         });
 

@@ -1,8 +1,8 @@
 require("./skins/header.js", this);
 this.out += '<div class="order_filter">\
     <div id="tabs-answer-user" class="subtabs">\
-        <a href="#" class="'+(_request.getParameter("sort") ? "" : "youarehere")+'">Ultime ricette</a>\
-        <a href="#" class="'+(_request.getParameter("sort") ? "youarehere" : "")+'">Le più votate</a>\
+        <a href="/" class="'+(_request.getParameter("likes") ? "" : "youarehere")+'">Ultime ricette</a>\
+        <a href="/?likes=true" class="'+(_request.getParameter("likes") ? "youarehere" : "")+'">Le più votate</a>\
     </div>\
     ';
 this.out += '<select name="category">\

@@ -9,4 +9,12 @@ $(function(){
         if(title.length > len)
             $this.text( title.substring(0, len) + "..." );
     });
+
+
+    // pagination
+    $("#smb").click(function(e) {
+        
+        e.preventDefault();
+        e.stopPropagation();
+    });
 });

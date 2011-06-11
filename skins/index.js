@@ -46,6 +46,8 @@ for(var i=0; i<this.recipes.length; i++) {
 ';
 }
 this.out +='</ul>\
-<div class="page_break"></div>';
+<div class="page_break" style="clear: both"></div>\
+           <div class="lsbb" style="border-left:1px solid #ccc;text-align:center;width:320px;height:30px"><input class="lsb" id="smb" onclick="this.value=\"Caricamento in corso...\";this.blur();google.x(this,function(){google.isr.smr()})" style="width:320px !important;background-repeat:repeat-x;padding:0" type="button" value="Altri risultati"></div>\
+    ';
 
 require("./skins/footer.js", this);

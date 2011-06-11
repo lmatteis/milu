@@ -1135,3 +1135,23 @@ border: 1px solid #808185;
 color: white;
 font-weight: bold;
 }
+.lsb {
+font: 15px arial,sans-serif;
+background-position: bottom;
+border: 0;
+color: black;
+cursor: pointer;
+height: 30px;
+margin: 0;
+vertical-align: top;
+}
+.lsbb {
+background: #EEE;
+border: 1px solid #999;
+border-top-color: #CCC;
+border-left-color: #CCC;
+height: 30px;
+margin: auto;
+margin-top: 10px;
+}
+

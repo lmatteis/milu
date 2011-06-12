@@ -54,8 +54,15 @@ apejs.urls = {
                             var id = like.getProperty("recipeId"),
                                 key = googlestore.createKey("recipe", parseInt(id, 10)),
                                 rec = googlestore.get(key);
-                            // append it to the recipe array
-                            recipes.push(rec);
+
+                            // filter the cat manually
+                            if(cat && cat != "") {
+                                if(rec.getProperty("category") == cat)
+                                    recipes.push(rec);
+                            } else {
+                                // append it to the recipe array
+                                recipes.push(rec);
+                            }
                         } catch(e){}
                     });
                 } else {

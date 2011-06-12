@@ -90,7 +90,7 @@ $(function(){
         var val = $(this).val();
 
         if(val == "Categorie")
-            urlParams.cat = false;
+            urlParams.cat = "";
         else
             urlParams.cat = val;
 

@@ -1,15 +1,15 @@
 require("./skins/header.js", this);
 this.out += '<div class="order_filter">\
     <div id="tabs-answer-user" class="subtabs">\
-        <a href="/" class="'+(_request.getParameter("likes") ? "" : "youarehere")+'">Ultime ricette</a>\
-        <a href="/?likes=true" class="'+(_request.getParameter("likes") ? "youarehere" : "")+'">Le più votate</a>\
+        <a href="/'+(_request.getParameter("cat") ? "?cat="+_request.getParameter("cat") : "")+'" class="'+(_request.getParameter("likes") ? "" : "youarehere")+'">Ultime ricette</a>\
+        <a href="/?likes=true'+(_request.getParameter("cat") ? "&cat="+_request.getParameter("cat") : "")+'" class="'+(_request.getParameter("likes") ? "youarehere" : "")+'">Le più votate</a>\
     </div>\
     ';
-this.out += '<select name="category">\
+this.out += '<select id="cat" name="category">\
             <option>Categorie</option>';
 for(var i=0; i<categories.length; i++) {
     var selected = "";
-    if(this.recipe && categories[i] == this.recipe.getProperty("category"))
+    if(_request.getParameter("cat") == categories[i])
         selected = "selected";
 
     this.out += '<option '+selected+' value="'+categories[i]+'">'+categories[i]+ '</option>';
@@ -46,8 +46,8 @@ for(var i=0; i<this.recipes.length; i++) {
 ';
 }
 this.out +='</ul>\
-<div class="page_break" style="clear: both"></div>\
-           <div class="lsbb" style="border-left:1px solid #ccc;text-align:center;width:320px;height:30px"><input class="lsb" id="smb" onclick="this.value=\"Caricamento in corso...\";this.blur();google.x(this,function(){google.isr.smr()})" style="width:320px !important;background-repeat:repeat-x;padding:0" type="button" value="Altri risultati"></div>\
-    ';
+<div class="page_break" style="clear: both"></div>';
+
+this.out += '<div class="lsbb" style="border-left:1px solid #ccc;text-align:center;width:320px;height:30px"><input class="lsb" id="smb" style="width:320px !important;background-repeat:repeat-x;padding:0" type="button" value="Altri risultati"></div>';
 
 require("./skins/footer.js", this);

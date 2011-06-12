@@ -31,11 +31,12 @@ apejs.urls = {
     "/": {
         get: function(request, response) {
             var currPage = request.getParameter("page") || 1,
-                tot = 1,
+                tot = 2, // number of items per page
                 offset = tot * (currPage-1);
 
             var cat = request.getParameter("cat"),
-                likes = request.getParameter("likes");
+                likes = request.getParameter("likes"),
+                json = request.getParameter("json");
 
             try {
                 if(likes == "true") { 
@@ -70,12 +71,33 @@ apejs.urls = {
                     recipes = recipes.fetch();
                 }
 
-                // pass all this data to the skin
                 var o = { 
-                    recipes: recipes
+                    recipes: recipes,
+                    tot: tot
                 };
-                require("./skins/index.js", o);
-                response.getWriter().println(o.out);
+                if(json == "true") {
+                    response.setContentType("text/plain");
+                    var arr = [];
+                    recipes.forEach(function(r) {
+                        var recipeUser = googlestore.get(r.getProperty("userKey"));
+                        var comments = googlestore.query("comment")
+                            .filter("recipeKey", "=", r.getKey())
+                            .fetch();
+                        arr.push({
+                            "id": ""+r.getKey().getId(),
+                            "title": ""+r.getProperty("title"),
+                            "thumb": '/serve/'+r.getProperty("thumbKey").getId()+'.png',
+                            "author_id": ""+recipeUser.getKey().getId(),
+                            "author_username": ""+recipeUser.getProperty("username"),
+                            "numcomments": comments.length
+                        });
+                    });
+                    response.getWriter().println(JSON.stringify(arr));
+                } else {
+                    // pass all this data to the skin
+                    require("./skins/index.js", o);
+                    response.getWriter().println(o.out);
+                }
             } catch (e) {
                 response.getWriter().println(e);
             }

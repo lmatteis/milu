@@ -31,7 +31,7 @@ apejs.urls = {
     "/": {
         get: function(request, response) {
             var currPage = request.getParameter("page") || 1,
-                tot = 2, // number of items per page
+                tot = 16, // number of items per page
                 offset = tot * (currPage-1);
 
             var cat = request.getParameter("cat"),

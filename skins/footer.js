@@ -5,7 +5,7 @@ this.out += '\
  \
 	<div id="footer-wrapper"> \
 	<div id="footer"> \
-		<p>Copyright &copy; 2011 Il Grillo Mangiante.</p> \
+		<p><a href="mailto:info@ilgrillomangiante.com" alt="info@ilgrillomangiante.com">Contatti</a><span class="light">&bull;</span>Copyright &copy; 2011 Il Grillo Mangiante.</p> \
 	</div> \
 	</div> \
  \

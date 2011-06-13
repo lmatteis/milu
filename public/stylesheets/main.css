@@ -310,6 +310,10 @@ input[type=file] {
 }
 
 .light { color: #ddd; }
+#footer span.light {
+    margin-left: 10px;
+    margin-right: 10px;
+}
 
 #home #navigation {
 	float: left;

@@ -40,7 +40,8 @@ window.addEvent("domready", function(){\
 				</p>\
 				<p>\
 					<label for="categories">Categoria:</label>\
-                        <select name="category">';
+                        <select name="category">\
+                        <option></option>';
             for(var i=0; i<categories.length; i++) {
                 var selected = "";
                 if(this.recipe && categories[i] == this.recipe.getProperty("category"))
